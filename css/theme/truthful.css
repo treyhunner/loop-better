@@ -138,26 +138,6 @@ body {
   padding: 10px;
 }
 
-pre.python code {
-  box-sizing: border-box;
-  background-image: url('../../python-logo.svg');
-  background-repeat: no-repeat;
-  background-position: right top;
-  background-size: contain;
-  background-size: 60px auto;
-  min-height: 70px;
-}
-
-pre.javascript code {
-  box-sizing: border-box;
-  background-image: url('../../js-logo.svg');
-  background-repeat: no-repeat;
-  background-position: right top;
-  background-size: contain;
-  background-size: 60px auto;
-  min-height: 70px;
-}
-
 .reveal code {
   font-family: monospace; }
 
