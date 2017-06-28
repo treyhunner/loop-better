@@ -721,6 +721,20 @@ True
         </section>
 
         <section>
+          <h2>Iterators are their own iterators</h2>
+          <pre class="python"><code data-trim data-noescape>
+def is_iterator(iterable):
+    return iter(iterable) is iterable
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - This is the last part of the iterator protocol that I didn't mention
+            - If you ask an iterable for an iterator and it gives you itself back, that iterable **must** be an iterator
+            - All iterators are iterables
+            - And all iterators are their own iterators
+          </aside>
+        </section>
+
+        <section>
           <h2>Iterators are single-purposed</h2>
           <pre class="python"><code data-trim data-noescape>
 >>> numbers = [1, 2, 3, 5, 7]
