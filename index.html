@@ -434,6 +434,7 @@ def funky_for_loop(iterable, action_to_do):
           </code></pre>
           </p>
           <aside class="notes" data-markdown>
+            - Let's start with a `for` loop first
             - Here we have a function that accepts an iterable and a function named `action_to_do`
             - Our function loops over this iterable and calls `action_to_do` on each item
             - I'm going to show you how we could write this same code by manually looping using iterators, instead of using a `for` loop
@@ -498,10 +499,11 @@ print(*numbers)
 unique_numbers = set(numbers)
           </code></pre>
           <aside class="notes" data-markdown>
-            - **🐭** For loops use the iterator protocol
+            - For loops use the iterator protocol
             - **🐭** tuple unpacking uses it
             - **🐭** star expressions use it
             - **🐭** many built-in functions rely on the iterator protocol
+            - The iterator protocol powers all forms of iteration in Python
           </aside>
         </section>
 
@@ -513,7 +515,7 @@ unique_numbers = set(numbers)
           </ul>
           <aside class="notes" data-markdown>
             - From our perspective as Python programmers, an iterable is anything you can iterate over
-            - We can test if something is an iterable by trying to loop over it
+            - So we can test if something is an iterable by trying to loop over it
             - Anything you can loop over in a for loop is an iterable
             - And every iterable can be looped over with a for loop
           </aside>
@@ -545,7 +547,7 @@ False
           <aside class="notes" data-markdown>
             - From Python's perspective, an iterable is anything you can pass to the built-in `iter` function **🐭**
             - If something is an iterable, you can get an iterator from it by passing it to the `iter` function
-            - **🐭* So we can test if something *is* an iterable by passing it to the `iter` function and *making sure* that we don't get an exception 
+            - **🐭** So we can test if something *is* an iterable by passing it to the `iter` function and *making sure* that we don't get an exception 
             - Anything you can get an iterator from **is** an iterable
           </aside>
         </section>
@@ -565,7 +567,7 @@ False
 StopIteration</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - **🐭* If something is an iterator you can call the built-in `next` function on it to get the next item from it **🐭**
+            - **🐭** If something is an iterator you can call the built-in `next` function on it to get the next item from it **🐭**
             - If there are no more items you'll get a `StopIteration` exception **🐭**
             - Any object you can call the `next` function on *is* an iterator **🐭**
           </aside>
@@ -776,10 +778,10 @@ TypeError: 'list_iterator' object is not subscriptable</span>
           </code></pre>
           <aside class="notes" data-markdown>
             - Here we have a generator object, `squares`
-            - If we pass this generator to the `tuple` constructor, we'll get a tuple of its items back
-            - If we then try to compute the `sum` of the numbers in this generator, we'll get `0`
+            - If we pass this generator to the `tuple` constructor, we'll get a tuple of its items back **🐭**
+            - If we then try to compute the `sum` of the numbers in this generator, we'll get `0` **🐭**
             - This generator is now empty: we've exhausted it
-            - If we try to make a tuple out of it again, we'll get an empty tuple
+            - If we try to make a tuple out of it again, we'll get an empty tuple **🐭**
             - Generators are iterators
             - And iterators are single-use iterables
           </aside>
@@ -798,9 +800,9 @@ TypeError: 'list_iterator' object is not subscriptable</span>
 [3, 5, 7]</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - We can call next on an iterator to manually loop over it
-            - If we call next on an iterator a couple times...
-            - And then make a list out of it...
+            - We can call next on an iterator to manually loop over it **🐭**
+            - If we call next on an iterator a couple times... **🐭**
+            - And then make a list out of it... **🐭**
             - We'll only get the items after those first two
             - Because we've partially-consumed this iterator
             - Iterators are like one-directional tally counters without a reset button
@@ -824,11 +826,11 @@ True
 [25, 49]</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - If we ask whether `9` is in this `squares` generator, we'll get `True`
-            - If we ask the same question again, we'll get `False`
-            - When whether `9` is in this generator, Python has to loop over this generator to find `9`
-            - If we keep looping over it at this point, we'll only get the last two numbers because we've already consumed the numbers before this point
-            - Asking whether something is *contained* in an iterator will partially consume it
+            - If we ask whether `9` is in this `squares` generator, we'll get `True` **🐭**
+            - If we ask the same question again, we'll get `False` **🐭**
+            - When whether `9` is in this generator, Python has to loop over this generator to find `9` **🐭**
+            - If we keep looping over it at this point, we'll only get the last two numbers because we've already consumed the numbers before this point **🐭**
+            - Asking whether something is *contained* in an iterator will partially consume it **🐭**
             - There is no way to know whether something is in an iterator without starting to loop over it
           </aside>
         </section>
@@ -850,7 +852,7 @@ True
           </code></pre>
           <aside class="notes" data-markdown>
             - If we get multiple iterators from a list, we can loop over them independently **🐭**
-            - As we loop over one **🐭**
+            - **🐭** As we loop over one **🐭**
             - The other one will maintain its place **🐭**
             - These iterators are independent of each other **🐭**
           </aside>
@@ -896,11 +898,10 @@ True</span>
 [49]</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - Here we're using the `itertools.takewhile` function to get an iterator which will give us all numbers in our `squares` generator which are less than 10
-            - If we start to loop over `squares` generator...
-            - And then loop over our `takewhile` iterator, it will have *skipped* our first square because we partially-consumed our `squares` generator
-            - If we loop over the rest of our `squares` generator we'll see that skipped 25 because `takewhile` had to look at the number 25 to see that 9 was the last consecutive number less than 10.
-            - If we loop over the rest of our squares generator we'll see that 25 seems to have been skipped
+            - **🐭** Here we're using the `itertools.takewhile` function to get an iterator which will give us all numbers in our `squares` generator which are less than 10 
+            - If we start to loop over `squares` generator... **🐭**
+            - And then loop over our `takewhile` iterator (**🐭**), it will have *skipped* our first square because we partially-consumed our `squares` generator
+            - If we loop over the rest of our squares generator (**🐭**) we'll see that 25 seems to have been skipped
             - The `takewhile` iterator had to take a look at the number `25` to see that `9` was the last consecutive number that was less than `10`
           </aside>
         </section>
@@ -952,7 +953,7 @@ ValueError: min() arg is an empty sequence
             - When working with iterables, try not to make overly-specific assumptions
             - This function calculates the maximum and minimum values in an iterable and then subtracts them
             - This function *assumes* that we can loop over iterables twice
-            - It works for lists, but it doesn't work for generators or any other type of iterator
+            - It works for lists, but it doesn't work for generators or any other type of iterator **🐭**
             - You can't assume iterables can be looped over twice
           </aside>
         </section>
@@ -973,7 +974,7 @@ TypeError: object of type 'generator' has no len()
           </code></pre>
           <aside class="notes" data-markdown>
             - This function assumes that iterables have a length
-            - Again, it works for lists but not for generators
+            - Again, it works for lists but not for generators **🐭**
             - You can't assume iterables have a length
           </aside>
         </section>
@@ -984,7 +985,7 @@ TypeError: object of type 'generator' has no len()
 def last_three(iterable):
     return iterable[-3:]
           </code></pre>
-          <pre class="python"><code data-trim>
+          <pre class="python fragment"><code data-trim>
 >>> numbers = [1, 2, 3, 5, 7]
 >>> squares = (n**2 for n in numbers)
 >>> last_three(numbers)
@@ -994,7 +995,7 @@ TypeError: 'generator' object is not subscriptable
           </code></pre>
           <aside class="notes" data-markdown>
             - Here we're assuming that iterables can be sliced
-            - This works for lists but not for iterators
+            - This works for lists but not for iterators **🐭**
             - You **cannot** assume that iterables can be *indexed or sliced*
           </aside>
         </section>
