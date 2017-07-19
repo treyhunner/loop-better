@@ -34,8 +34,35 @@
           <small><a href="http://treyhunner.com" rel="author">Trey Hunner</a> / <a href="https://twitter.com/treyhunner">@treyhunner</a></small>
           </p>
           <aside class="notes" data-markdown>
-            - My name is Trey.  I do corporate Python training for a living.
+            - My name is Trey.  I help Django teams with on-boarding and team training.
             - I'd like to go on a journey with you through the land of iterables and iterators
+          </aside>
+        </section>
+
+        <section>
+          <h1>Things I Do</h1>
+          <div class="aboutme-card">
+            <a href="http://truthful.technology"><img src="truthful-technology-logo.svg" class="no-style aboutme-logos"></a>
+            <span>On-site training for Django teams</span>
+          </div>
+          <div class="aboutme-card">
+            <a href="http://weeklypython.chat"><img src="pythonchat-logo.png" class="no-style aboutme-logos"></a>
+            <span>Weekly Python Chat live webcast host</span>
+          </div>
+          <div class="aboutme-card">
+            <a href="http://pythonsd.org"><img src="pythonsd-logo.svg" class="no-style aboutme-logos"></a>
+            <span>San Diego Python meetup co-organizer</span>
+          </div>
+          <div class="aboutme-card">
+            <a href="http://djangogirls.org/sandiego"><img src="djangogirls-logo.svg" class="no-style aboutme-logos"></a>
+            <span>Django Girls San Diego co-organizer</span>
+          </div>
+          <aside class="notes" data-markdown>
+            - As I mentioned I do on-site Python training for Django teams
+            - I host a live online webcast every week on Python-related topics
+            - I'm one of the co-organizers of my local Python meetup in San Diego
+            - I've helped organize four Django Girls workshops in Southern California
+            - And I'm one of the 13 directors at the Python Software Foundation
           </aside>
         </section>
 
@@ -56,7 +83,7 @@
           <h2>Definitions</h2>
           <ul>
             <li><strong>iterable</strong>: anything you can loop over</li>
-            <li><strong>sequences</strong>: ordered iterables indexable (starting at 0)</li>
+            <li><strong>sequence</strong>: ordered iterable, indexable (starting at 0)</li>
             <li><strong>iterator</strong>: magical objects that make looping possible</li>
           </ul>
           <aside class="notes" data-markdown>
@@ -64,11 +91,27 @@
             - An **iterable** is anything you can iterate over.  So anything you can loop over with a `for` loop is an iterable.
             - Lists are iterables, dictionaries are iterables, sets are iterables, strings are iterables... lots of things in Python are iterables
             - If you can loop over it with a `for` loop, it's an iterable
-            - Sequences are a special type of iterable that can be indexed from `0` until one less than its length
+            - **Sequences** are a special type of iterable that can be indexed from `0` until one less than its length
             - Lists, tuples, and strings are all sequences
             - Iterators are a little trickier to explain
-            - Essentially, iterators are the things that make iterables work
+            - Essentially, **iterators** are the things that *make iterables work*
             - If looping is about to happen, an iterator has to get involved
+          </aside>
+        </section>
+
+        <section>
+          <h2>Our Objectives</h2>
+          <ul>
+            <li>Loop over an iterable without using a <code>for</code> loop</li>
+            <li>Discuss <code>iterators</code> and why they matter</li>
+            <li>Discover the <strong>the iterator protocol</strong>: the secret to troubleshooting odd iteration issues in Python</li>
+          </ul>
+          <aside class="notes" data-markdown>
+            - We're going start by attempting something weird...
+            - We're going to try to create a `for` loop without actually writing a `for` loop
+            - Lists, dictionaries, Django querysets, files, and anything else you can loop over all rely on: the iterator protocol
+            - The iterator protocol is the secret to all looping in Python
+            - Our goal is to understand it so that we can more easily troubleshoot weird looping issues as they arise
           </aside>
         </section>
 
@@ -77,37 +120,9 @@
       <section>
 
         <section>
-          <h2>Looping in Python</h2>
+          <h2>Review: Loops</h2>
           <aside class="notes" data-markdown>
-            - Let's start by reviewing the different types of loops that exist in Python and how our looping constructs compare to other programming languages
-          </aside>
-        </section>
-
-        <section>
-          <h2>C-style while loops</h2>
-          <p>
-          <pre class="javascript"><code data-trim>
-numbers = [1, 2, 3, 5, 7]
-i = 0
-while (i < numbers.length) {
-    console.log(numbers[i])
-    i += 1
-}
-          </code></pre>
-          <pre class="fragment"><code data-trim>
-1
-2
-3
-5
-7
-          </code></pre>
-          </p>
-          <aside class="notes" data-markdown>
-            - This is a traditional C-style `while` loop
-            - This is JavaScript code... not the greatest JavaScript but it is syntactically valid
-            - We set `i` to `0` and then we start looping
-            - This `while` loop keeps on executing the same code over and over as long as the condition (`i &lt; numbers.length`) is true **🐭**
-            - So each number in this list (from index 0 to index 4) gets printed out
+            - Let's review the different types of loops that exist in Python and how our looping constructs compare to other programming languages
           </aside>
         </section>
 
@@ -130,8 +145,10 @@ while i < len(numbers):
           </code></pre>
           </p>
           <aside class="notes" data-markdown>
-            - This is the same `while` loop written in Python
-            - Again we set `i` to `0` and then we loop until the condition (`i &lt; len(numbers)`) becomes false **🐭**
+            - This is a `while` loop
+            - We set `i` to `0` and then we start looping
+            - This `while` loop keeps on executing the same code over and over as long as the condition (`i &lt; len(numbers)`) is true **🐭**
+            - So each number in this list (from index 0 to index 4) gets printed out
             - So `while` loops loop until a given condition
             - Notice that we're:
               - initializing a counter
@@ -201,9 +218,9 @@ for n in numbers:
       <section>
 
         <section>
-          <h2>Iterables</h2>
+          <h2>Review: Iterables</h2>
           <aside class="notes" data-markdown>
-            - Let's talk about iterables
+            - Before we dive much deeper, let's do a quick review of iterables
           </aside>
         </section>
 
@@ -274,9 +291,9 @@ for item in some_iterable:
       <section>
 
         <section>
-          <h2>Looping manually</h2>
+          <h2>Looping without a <code>for</code> loop</h2>
           <aside class="notes" data-markdown>
-            - Let's imagine that you wanted to loop over an iterable without a `for` loop
+            - Now I'd like you to imagine that you want to loop over an iterable *without* using a `for` loop
             - How can you do that?
             - Is that even *possible*?
           </aside>
@@ -304,8 +321,8 @@ while i < len(numbers):
             - You might think that we could loop *using indexes* and a `while` loop
             - We could start at `0` and then count upward **🐭**
             - This works for lists, but it won't work everything
-            - This way of looping only works for lists, tuples, strings, and *other* types of sequences
-            - This won't work for all iterables
+            - This way of looping only works for sequences
+            - This *will not* work for all iterables
           </aside>
         </section>
 
@@ -572,6 +589,77 @@ StopIteration</span>
             - Any object you can call the `next` function on *is* an iterator **🐭**
           </aside>
         </section>
+
+<!--
+        <section>
+          <h4>Penelope the Pythonista & Isabelle the Iterable</h4>
+          <pre class="python"><code data-trim data-noescape>
+>>> ivan = iter(isabelle)
+          </code></pre>
+          <ol style="list-style-type: none;">
+            <li><strong>Penelope</strong>: Hey, could I meet one of your iterators?</li>
+            <li><strong>Isabelle</strong>: Sure!  This is Ivan, one of my iterators.</li>
+            <li><strong>Penelope</strong>: Excellent.  Thanks Isabelle!</li>
+          </ol>
+          <aside class="notes" data-markdown>
+            - TODO
+          </aside>
+        </section>
+
+        <section>
+          <h4>Penelope the Pythonista & Ivan the Iterator</h4>
+          <pre class="python"><code data-trim data-noescape>
+>>> item = next(ivan)
+>>> item2 = next(ivan)
+          </code></pre>
+          <ol style="list-style-type: none;">
+            <li><strong>Penelope</strong>: Hey Ivan.  Could I get your next item?</li>
+            <li><strong>Ivan</strong>: Sure.  It's 3.</li>
+            <li><strong>Penelope</strong>: Sweet. I'll be back later probably.</li>
+            <li><strong>Ivan</strong>: Okay whatever.</li>
+          </ol>
+          <aside class="notes" data-markdown>
+            - TODO
+          </aside>
+        </section>
+
+        <section>
+          <h4>Penelope the Pythonista & Ivan the Iterator</h4>
+          <pre class="python"><code data-trim data-noescape>
+>>> item = next(ivan)
+>>> item2 = next(ivan)
+          </code></pre>
+          <ol style="list-style-type: none;">
+            <li><strong>Penelope</strong>: Hey again Ivan.  Could I get your next item?</li>
+            <li><strong>Ivan</strong>: Sure.  It's 7.</li>
+            <li><strong>Penelope</strong>: Sweet.  See you later.</li>
+            <li><strong>Ivan</strong>: Sure.</li>
+          </ol>
+          <aside class="notes" data-markdown>
+            - TODO
+          </aside>
+        </section>
+
+        <section>
+          <h4>Penelope the Pythonista & Ivan the Iterator</h4>
+          <pre class="python"><code data-trim data-noescape>
+>>> item = next(ivan)
+>>> item2 = next(ivan)
+>>> item3 = next(ivan)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+          </code></pre>
+          <ol style="list-style-type: none;">
+            <li><strong>Penelope</strong>: Hey again. Could I get your next item?</li>
+            <li><strong>Ivan</strong>: StopIteration exception!!</li>
+            <li><strong>Penelope</strong>: Wow!  I guess I'm done looping then...</li>
+          </ol>
+          <aside class="notes" data-markdown>
+            - TODO
+          </aside>
+        </section>
+-->
 
       </section>
 

@@ -12,6 +12,7 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
  *********************************************/
 body {
   background: #F6F2FF;
+  background-color: #F6F2FF;
 }
 
 .reveal {
@@ -273,6 +274,25 @@ section.has-dark-background a:hover {
 
 .reveal .logo {
   height: 50px;
+}
+
+.reveal .aboutme-card {
+  display: inline-block;
+  padding: 20px;
+  width: 175px;
+  padding-top: 0;
+}
+
+.reveal .aboutme-card span {
+  display: inline-block;
+  font-size: 18px;
+  padding-top: 15px;
+}
+
+.reveal .aboutme-logos {
+  margin: auto;
+  display: block;
+  height: 175px;
 }
 
 /*********************************************
