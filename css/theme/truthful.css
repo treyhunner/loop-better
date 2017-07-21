@@ -280,20 +280,20 @@ section.has-dark-background a:hover {
 
   display: inline-block;
   padding: 20px;
-  width: 175px;
+  width: 200px;
   padding-top: 0;
 }
 
 .reveal .aboutme-card span {
   display: inline-block;
   font-size: 18px;
-  padding-top: 15px;
+  padding-top: 20px;
 }
 
 .reveal .aboutme-logos {
   margin: auto;
   display: block;
-  height: 175px;
+  height: 200px;
 }
 
 /*********************************************
