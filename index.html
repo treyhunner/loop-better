@@ -120,6 +120,82 @@
 
       </section>
 
+      <!-- TODO Fix this section -->
+      <section>
+
+        <section>
+          <h2>Looping Problems</h2>
+          <aside class="notes" data-markdown>
+            - If you learn something and your brain can't figure out a reason to remember it, you *will* forget it
+            - So before we learn *anything new* we need to look at some problems that are related to what we're about to learn
+          </aside>
+        </section>
+
+        <section>
+          <h2>Looping Twice</h2>
+          <pre class="python"><code data-trim data-noescape>
+>>> numbers = [1, 2, 3, 5, 7]
+>>> <span class="fragment">squares = (n**2 for n in numbers)
+>>> </span><span class="fragment">squares
+&lt;generator object &lt;genexpr> at 0x7efefd57c3b8>
+>>> <span class="fragment">tuple(squares)
+(1, 2, 3, 5, 7)
+>>> </span><span class="fragment">sum(squares)
+0
+>>> </span><span class="fragment">tuple(squares)
+()</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - `numbers` is a list
+            - `squares` is a generator that will give us the squares of each of those numbers
+            - Generators are lazy.  **(click)** We can't do much with `squares` except for loop over it
+            - We could pass it to the tuple constructor to make a tuple out of it **(click)**
+            - We could also pass it to `sum` to add up all the squared numbers **(click)**
+            - Except that doesn't work... we got `0`
+            - You cannot loop over generators twice.  We're going to learn why that is.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Looping Twice</h2>
+          <pre class="python"><code data-trim data-noescape>
+>>> names = ['Kayla', 'Daniel', 'Charlotte', 'Benjamin']
+>>> indexed_names = enumerate(names)
+>>> <span class="fragment">enumerate
+&lt;enumerate object at 0x7efefc06d9d8>
+>>> <span class="fragment">list(indexed_names)
+[(0, 'Kayla'), (1, 'Daniel'), (2, 'Charlotte'), (3, 'Benjamin')]
+>>> <span class="fragment">list(indexed_names)
+[]</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - This is also a problem with `enumerate` objects **(click)**
+            - If we loop over an `enumerate` object, we'll get tuples of indexes and items
+            - If we loop over the same `enumerate` object again, we get nothing at all
+            - Again, we're going to learn what's going on here
+          </aside>
+        </section>
+
+        <section>
+          <h2>Containment Checking</h2>
+          <pre class="python"><code data-trim data-noescape>
+>>> numbers = [1, 2, 3, 5, 7]
+>>> squares = (n**2 for n in numbers)
+>>> <span class="fragment">9 in squares
+True
+>>> </span><span class="fragment">9 in squares
+False</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - This is also a problem when checking whether a generator contains a particular item
+            - If we ask whether `9` is in this generator, it will tell us `True` because `3` squared is `9`
+            - If we ask the *same question* again, it will tell us `False`
+            - We'll also talk about what's going on here
+          </aside>
+        </section>
+
+      </section>
+
       <section>
 
         <section>
@@ -844,14 +920,143 @@ TypeError: 'list_iterator' object is not subscriptable</span>
           </code></pre>
           <aside class="notes" data-markdown>
             - So iterators are iterables, but they have no idea how many items they contain
-            - **🐭** So they have no length
-            - **🐭** They also can't be indexed
+            - **(click)** So they have no length
+            - **(click)** They also can't be indexed
             - The only things you can do with iterators are:
-              - call `next` on them **🐭**
-              - and loop over them **🐭**
-            - And if we loop over an iterator a second time, we'll get nothing back **🐭**
+              - call `next` on them **(click)**
+              - and loop over them **(click)**
+            - And if we loop over an iterator a second time, we'll get nothing back **(click)**
             - Iterators are lazy iterables
             - They can *only* be looped over once, and then they're done
+          </aside>
+        </section>
+
+        <section>
+          <h2>The truth</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Object</th>
+                <th>Iterable?</th>
+                <th>Iterator?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fragment"><td>Iterable</td><td>&#x2714;&#xfe0f;</td><td>&#x2753;</td></tr>
+              <tr class="fragment"><td>Iterator</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
+              <tr class="fragment"><td>Generator</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
+              <tr class="fragment"><td>Files</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
+              <tr class="fragment"><td>List</td><td>&#x2714;&#xfe0f;</td><td>&#x274c;</td></tr>
+            </tbody>
+          </table>
+          <aside class="notes" data-markdown>
+            - **(click)** So iterables are not necessarily iterators
+            - **(click)** But iterators are always iterable
+            - **(click)** For example generators are iterators
+            - **(click)** And files are iterators
+            - **(click)** But lists are not
+            - Iterators are always iterables, but iterables aren't always iterators
+          </aside>
+        </section>
+
+      </section>
+
+      <section>
+
+        <section>
+          <h2>What isn't an iterator?</h2>
+          <aside class="notes" data-markdown>
+            - TODO not every lazy iterable is an iterator
+            - TODO range isn't an iterator... you can loop over it twice... it's more of a lazy sequence
+            - TODO Django querysets are not iterators... they are lazy in that the don't do a database query until you start looping over them, specifically they do a query when you ask them for an iterator
+            - TODO files *are* iterators, but they kind of have a reset button because you can often seek them back to the beginning to start them over
+            - 
+          </aside>
+        </section>
+
+        <section>
+          <h2><code>range</code></h2>
+          <pre class="python"><code data-trim data-noescape>
+>>> numbers = range(1, 5)
+>>> <span class="fragment">next(numbers)
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: 'range' object is not an iterator
+>>> </span><span class="fragment">iter(numbers)
+&lt;range_iterator object at 0x7f5aef85e450>
+>>> </span><span class="fragment">iter(numbers) is numbers
+False
+>>> </span><span class="fragment">list(numbers)
+[1, 2, 3, 4]
+>>> </span><span class="fragment">list(numbers)
+[1, 2, 3, 4]</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - TODO
+          </aside>
+        </section>
+
+        <section>
+          <h2>Django <code>QuerySet</code></h2>
+          <pre class="python"><code data-trim data-noescape>
+>>> books = Book.objects.all()
+>>> <span class="fragment">next(books)
+Traceback (most recent call last):
+  File "&lt;console>", line 1, in &lt;module>
+TypeError: 'QuerySet' object is not an iterator
+>>> </span><span class="fragment">from django.db import connection
+>>> </span><span class="fragment">connection.queries
+[]
+>>> </span><span class="fragment">iter(books)
+>>> </span><span class="fragment">connection.queries
+[{'sql': 'SELECT "books_book"."id", "books_book"."title", "books_book"."publisher_id", "books_book"."publication_date", "books_book"."num_pages" FROM "books_book"', 'time': '0.001'}]</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - TODO
+          </aside>
+        </section>
+
+        <section>
+          <h2><code>QuerySet.iterator()</code></h2>
+          <pre class="python"><code data-trim data-noescape>
+>>> books = Book.objects.all()
+>>> <span class="fragment">book_iterator = books.iterator()
+>>> </span><span class="fragment">book_iterator
+&lt;generator object ModelIterable.__iter__ at 0x7f937e057678>
+>>> </span><span class="fragment">len(book_iterator)
+Traceback (most recent call last):
+  File "&lt;console>", line 1, in &lt;module>
+TypeError: 'generator' object has no len()
+>>> </span><span class="fragment">next(book_iterator)
+&lt;Book: The Art of Asking>
+>>> </span><span class="fragment">list(book_iterator)
+[&lt;Book: Success and Luck>, &lt;Book: Just Mercy>]
+>>> </span><span class="fragment">list(book_iterator)
+[]</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - TODO
+          </aside>
+        </section>
+
+      </section>
+
+      <section>
+
+        <section>
+          <h2>Creating Your Own Iterators</h2>
+          <aside class="notes" data-markdown>
+            - TODO
+              - If we want to make our own lazy iterable, we can create our own iterators
+            - TODO
+              - Iterators have a `__next__` and a `__iter__`.  This is an iterator class that accepts a list and squares each item in the list
+              - This is *not* how we usually make iterators
+            - TODO
+              - If you want to make your own lazy iterable, you typically make a generator
+              - Generator functions create a generator when you call the function
+            - TODO
+              - list comprehensions are a special syntax for creating new lists from old iterable
+              - generator expressions are a special syntax for creating a new generator from an old iterable
           </aside>
         </section>
 
