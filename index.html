@@ -34,8 +34,9 @@
           <small><a href="http://treyhunner.com" rel="author">Trey Hunner</a> / <a href="https://twitter.com/treyhunner">@treyhunner</a></small>
           </p>
           <aside class="notes" data-markdown>
-            - My name is Trey.  I help Django teams with on-boarding and team training.
+            - My name is Trey.  I help Django teams on-boarding new teammates and turn their front-end developers into full-stack Django developers
             - I'd like to go on a journey with you through the land of iterables and iterators
+            - Before we begin... here's an introduction slide
           </aside>
         </section>
 
@@ -61,11 +62,12 @@
             <span>Python Software Foundation director</span>
           </div>
           <aside class="notes" data-markdown>
-            - As I mentioned I do on-site Python training for Django teams
-            - I host a live online webcast every week on Python-related topics
-            - I'm one of the co-organizers of my local Python meetup in San Diego
+            - As I mentioned I do on-site Python training for Django-powered teams
+            - I also host a free live webcast every week on Python-related topics... Unfortunately I usually hold them at 3am in Australia Eastern Standard Time
+            - I'm also one of the co-organizers of my local Python meetup in San Diego
             - I've helped organize four Django Girls workshops in Southern California
-            - And I'm one of the 13 directors at the Python Software Foundation
+            - And I'm currently one of the 13 directors at the Python Software Foundation
+            - That's a bit about me... now let's set some expectations
           </aside>
         </section>
 
@@ -88,9 +90,10 @@
             <li><strong>iterable</strong>: anything you can loop over</li>
             <li><strong>sequence</strong>: ordered iterable, indexable (starting at 0)</li>
             <li><strong>iterator</strong>: magical objects that make looping possible</li>
+            <li><strong>__dunder__</strong>: method used for operator overloading</li>
           </ul>
           <aside class="notes" data-markdown>
-            - Before we get started, let's start with some definitions
+            - I will be using some terminology that you may not already be familiar with
             - An **iterable** is anything you can iterate over.  So anything you can loop over with a `for` loop is an iterable.
             - Lists are iterables, dictionaries are iterables, sets are iterables, strings are iterables... lots of things in Python are iterables
             - If you can loop over it with a `for` loop, it's an iterable
@@ -99,17 +102,19 @@
             - Iterators are a little trickier to explain
             - Essentially, **iterators** are the things that *make iterables work*
             - If looping is about to happen, an iterator has to get involved
+            - I'll also use the term "dunder" which stands for "double underscore".  Dunder methods are essentially used for operator overloading.
           </aside>
         </section>
 
         <section>
-          <h2>Our Objectives</h2>
+          <h2>Our Goals</h2>
           <ul>
             <li>Loop over an iterable without using a <code>for</code> loop</li>
             <li>Discuss <code>iterators</code> and why they matter</li>
             <li>Discover the <strong>the iterator protocol</strong>: the secret to troubleshooting odd iteration issues in Python</li>
           </ul>
           <aside class="notes" data-markdown>
+            - TODO update goals to include looking at looping problems and making our own iterables
             - We're going start by attempting something weird...
             - We're going to try to create a `for` loop without actually writing a `for` loop
             - Lists, dictionaries, Django querysets, files, and anything else you can loop over all rely on: the iterator protocol
@@ -120,7 +125,6 @@
 
       </section>
 
-      <!-- TODO Fix this section -->
       <section>
 
         <section>
@@ -866,8 +870,8 @@ StopIteration</span>
           <aside class="notes" data-markdown>
             - **Iterators** are also **iterables**
             - Which means that we can ask them for an iterator **(click)**
-            - Remember that you can call the built-in `iter` on any iterable ask it for an iterator **(click)**
-            - We can call also call `iter` on an *iterator* to ask **it** for an iterator
+            - Remember that you can call the built-in `iter` function on any iterable to ask it for an iterator **(click)**
+            - We can also call `iter` on an *iterator* to ask **it** for an iterator
           </aside>
         </section>
 
@@ -878,11 +882,10 @@ StopIteration</span>
 >>> iterator = iter(numbers)
 >>> </span><span class="fragment">iterator2 = iter(iterator)
 >>> </span><span class="fragment">iterator is iterator2
-True
-          </code></pre>
+True</code></pre>
           <aside class="notes" data-markdown>
-            - **(click)** In fact... when you ask an iterator *for* an iterator, it will give you **itself** **(click)**
-            - Iterators are iterables and their iterator is themselves
+            - **(click)** In fact... when you ask an iterator *for* an iterator, it will give you **itself**
+            - **(click)** Iterators are iterables and their iterator is themselves
             - Iterators are their own iterators
           </aside>
         </section>
@@ -894,8 +897,8 @@ def is_iterator(iterable):
     return iter(iterable) is iterable
           </code></pre>
           <aside class="notes" data-markdown>
-            - This is the last part of the iterator protocol that I didn't mention
-            - If you ask an iterable for an iterator and it gives you itself back, that iterable **must** be an iterator
+            - This is the last part of the iterator protocol that I neglected to mention before
+            - If you ask an iterable for an iterator and it gives you *itself* back, that iterable **must** be also an iterator
             - All iterators are iterables
             - And all iterators are their own iterators
           </aside>
@@ -951,11 +954,11 @@ TypeError: 'list_iterator' object is not subscriptable</span>
           </table>
           <aside class="notes" data-markdown>
             - **(click)** So iterables are not necessarily iterators
-            - **(click)** But iterators are always iterable
+            - **(click)** But iterators are always iterables
             - **(click)** For example generators are iterators
             - **(click)** And files are iterators
             - **(click)** But lists are not
-            - Iterators are always iterables, but iterables aren't always iterators
+            - Iterables are not *always* iterators, but iterators *are* always iterables
           </aside>
         </section>
 
@@ -966,11 +969,9 @@ TypeError: 'list_iterator' object is not subscriptable</span>
         <section>
           <h2>What isn't an iterator?</h2>
           <aside class="notes" data-markdown>
-            - TODO not every lazy iterable is an iterator
-            - TODO range isn't an iterator... you can loop over it twice... it's more of a lazy sequence
-            - TODO Django querysets are not iterators... they are lazy in that the don't do a database query until you start looping over them, specifically they do a query when you ask them for an iterator
-            - TODO files *are* iterators, but they kind of have a reset button because you can often seek them back to the beginning to start them over
-            - 
+            - So iterators can be used as a sort of lazy iterable
+            - But not all seemingly lazy iterables are iterators
+            - Let's briefly take a look at a couple iterators and non-iterators
           </aside>
         </section>
 
@@ -978,41 +979,56 @@ TypeError: 'list_iterator' object is not subscriptable</span>
           <h2><code>range</code></h2>
           <pre class="python"><code data-trim data-noescape>
 >>> numbers = range(1, 5)
->>> <span class="fragment">next(numbers)
-Traceback (most recent call last):
-  File "&lt;stdin>", line 1, in &lt;module>
-TypeError: 'range' object is not an iterator
->>> </span><span class="fragment">iter(numbers)
+>>> <span class="fragment">iter(numbers)
 &lt;range_iterator object at 0x7f5aef85e450>
 >>> </span><span class="fragment">iter(numbers) is numbers
 False
+>>> </span><span class="fragment">next(numbers)
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: 'range' object is not an iterator
 >>> </span><span class="fragment">list(numbers)
 [1, 2, 3, 4]
 >>> </span><span class="fragment">list(numbers)
 [1, 2, 3, 4]</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - TODO
+            - range objects are not iterators **(click)**
+            - We can see this by testing whether range is its own iterator **(click)**
+            - We could also try passing a range object to the `next` function and seeing an error **(click)**
+            - range objects compute their contents lazily **(click)**
+            - But they're not single-use iterables
+            - You can loop over them as many times as you want **(click)**
+            - So range objects aren't really lazy iterables so much as lazy sequences
+            - Whatever they are, they're definitely not iterators
           </aside>
         </section>
 
         <section>
           <h2>Django <code>QuerySet</code></h2>
           <pre class="python"><code data-trim data-noescape>
+>>> from django.db import connection
 >>> books = Book.objects.all()
 >>> <span class="fragment">next(books)
 Traceback (most recent call last):
   File "&lt;console>", line 1, in &lt;module>
 TypeError: 'QuerySet' object is not an iterator
->>> </span><span class="fragment">from django.db import connection
 >>> </span><span class="fragment">connection.queries
 []
 >>> </span><span class="fragment">iter(books)
 >>> </span><span class="fragment">connection.queries
-[{'sql': 'SELECT "books_book"."id", "books_book"."title", "books_book"."publisher_id", "books_book"."publication_date", "books_book"."num_pages" FROM "books_book"', 'time': '0.001'}]</span>
+[{'sql': 'SELECT "books_book"."id", "books_book"."title", "books_book"."publisher_id", "books_book"."publication_date", "books_book"."num_pages" FROM "books_book"', 'time': '0.001'}]
+>>> </span><span class="fragment">iter(books) is books
+False</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - TODO
+            - Django querysets are also not iterators **(click)**
+            - They are sort of lazy though **(click)**
+            - QuerySets will not query your database until ask them for an iterator **(click)**
+            - As soon as you ask them for an iterator, a query will execute **(click)**
+            - So Django querysets won't do any work until you loop over them
+            - And they cache their results so they don't need to do the same query more than once
+            - **(click)** But they are *not* iterators
           </aside>
         </section>
 
@@ -1035,7 +1051,13 @@ TypeError: 'generator' object has no len()
 []</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - TODO
+            - Django's querysets store all of their models in memory so they don't have to perform the same query twice
+            - But that can cause a problem if you have millions of records you're trying to iterate over
+            - For that use case, Django's querysets provide a method called `iterator` **(click)**
+            - The `iterator` method gives us an iterator instead of a queryset **(click)**
+            - Just like every iterator, we can call `next` on it **(click)** or loop over it, **(click)** but that's it
+            - And once we've looped over a queryset iterator **(click)**, it's consumed
+            - So Django querysets are not iterators, but you can get an iterator for lazily loop over a database query in Django
           </aside>
         </section>
 
@@ -1046,17 +1068,155 @@ TypeError: 'generator' object has no len()
         <section>
           <h2>Creating Your Own Iterators</h2>
           <aside class="notes" data-markdown>
-            - TODO
-              - If we want to make our own lazy iterable, we can create our own iterators
-            - TODO
-              - Iterators have a `__next__` and a `__iter__`.  This is an iterator class that accepts a list and squares each item in the list
-              - This is *not* how we usually make iterators
-            - TODO
-              - If you want to make your own lazy iterable, you typically make a generator
-              - Generator functions create a generator when you call the function
-            - TODO
-              - list comprehensions are a special syntax for creating new lists from old iterable
-              - generator expressions are a special syntax for creating a new generator from an old iterable
+            - So
+              - we've learned about the iterator protocol
+              - we've seen how iterables and iterators work
+              - we've seen some examples of iterators
+              - and we've seen some examples of non-iterators
+            - Let's quickly take a look at how you can make your own iterables and iterators
+          </aside>
+        </section>
+
+        <section>
+          <h2>Creating iterables</h2>
+          <pre class="python"><code data-trim data-noescape>
+class AlwaysOne:
+    def __iter__(self):
+        return iter([1])  # Return list iterator (cheating a bit)
+          </code></pre>
+          <pre class="python"><code data-trim data-noescape>
+>>> <span class="fragment">one = AlwaysOne()
+>>> </span><span class="fragment">iter(one)
+&lt;list_iterator object at 0x7f749ebe3048>
+>>> </span><span class="fragment">for item in one:
+...     print(item)
+...
+</span><span class="fragment">1
+>>> </span><span class="fragment">list(one)
+[1]
+>>> </span><span class="fragment">list(one)
+[1]</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - This class allows us to make our own iterable objects **(click)**
+            - The one thing we can do with iterables is get an iterator from them using the built-in `iter` function **(click)**
+            - The dunder iter method (that's double underscore iter double underscore) is what gets called when we pass our object to `iter`
+            - The only thing we need to make an iterable is a dunder iter method that returns an iterator **(click)**
+            - Once we have this we can loop over our iterable **(click)**
+            - Because our dunder iter method returns a new iterator each time we call it **(click)**, we can loop over our iterable as many times as we want **(click)**
+            - So we've made our own iterable class here by implementing a dunder iter method
+          </aside>
+        </section>
+
+        <section>
+          <h2>Creating iterators</h2>
+          <pre class="python"><code data-trim data-noescape>
+class OnlyOne:
+    def __next__(self):
+        return 1
+    def __iter__(self):
+        return self
+          </code></pre>
+          <pre class="python"><code data-trim data-noescape>
+>>> <span class="fragment">one = OnlyOne()
+>>> </span><span class="fragment">iter(one) is one
+True
+>>> </span><span class="fragment">next(one)
+1
+>>> </span><span class="fragment">next(one)
+1
+>>> </span><span class="fragment">for item in one:
+...     print(item)
+...</span>
+<span class="fragment">1</span>
+<span class="fragment">1</span>
+<span class="fragment">1</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - We could also make our own iterator class **(click)**
+            - Iterators need two things: a dunder iter method and a dunder next method
+            - The dunder iter method should return `self` because iterators are their own iterators **(click)**
+            - The dunder next method should returns each item in the iterator and raise a `StopIteration` exception when the iterator is empty **(click)**
+            - Notice that our iterator's dunder next method will always return the number `1` **(click)**
+            - **(click)** Which means that if we loop over our iterator **(click)** it will print out `1` forever **(click)**, or until we break out of the loop somehow **(click)**
+            - So iterator classes allow us to create lazy iterables, but they're a little complicated to make
+            - There is an easier way to make iterators
+          </aside>
+        </section>
+
+        <section>
+          <h2>Generators: easy iterators</h2>
+          <pre class="python"><code data-trim data-noescape>
+def only_one():
+    while True:
+        yield 1
+          </code></pre>
+          <pre class="python"><code data-trim data-noescape>
+>>> <span class="fragment">one = only_one()
+>>> </span><span class="fragment">next(one)
+1
+>>> </span><span class="fragment">next(one)
+1
+>>> </span><span class="fragment">for item in one:
+...     print(item)
+...</span>
+<span class="fragment">1</span>
+<span class="fragment">1</span>
+<span class="fragment">1</span>
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - Generator functions allow us to create iterators without creating a whole new class **(click)**
+            - The `yield` statement there is basically a special syntax that allow us to put a function on pause between `next` calls **(click)**
+            - So we can call `iter` and `next` on generator functions just like we could on the class we made before **(click)**
+            - **(click)** And just like our class before **(click)**, this generator will give us an infinite number of `1`s as we loop over it **(click)**  **(click)**
+          </aside>
+        </section>
+
+        <section>
+          <h2>Generators: easy iterators</h2>
+          <pre class="python fragment"><code data-trim data-noescape>
+class count:
+    def __init__(self):
+        self.number = 0
+    def __next__(self):
+        number = self.number
+        self.number += 1
+        return number
+    def __iter__(self):
+        return self
+          </code></pre>
+          <pre class="python fragment"><code data-trim data-noescape>
+def count():
+    number = 0
+    while True:
+        yield number
+        number += 1
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - **(click)** Here's a custom iterator class that counts upward forever as we loop over it
+            - **(click)** And here's a generator function that does exactly the same thing
+            - That `yield` statement may seem magical, but it can make your iterator a lot easier to understand
+            - If you need to make your own custom iterator: consider making a generator function
+          </aside>
+        </section>
+
+        <section>
+          <h2>Generator expressions</h2>
+          <pre class="python"><code data-trim data-noescape>
+def square_all(numbers):
+    for n in numbers:
+        yield n**2
+          </code></pre>
+          <pre class="python"><code data-trim data-noescape>
+def square_all(numbers):
+    return (n**2 for n in numbers)
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - Generator functions often loop over one iterable to make a new iterable **(click)**
+            - Here we're looping over a list of numbers and squaring each number
+            - If you're writing a generator function that consumes an iterable, think of making a generator expression instead **(click)**
+            - This generator expression below is equivalent to that generator function above
+            - (By the way I'll be talking about generator expressions a bit tomorrow during my talk on comprehensions)
           </aside>
         </section>
 
@@ -1067,10 +1227,10 @@ TypeError: 'generator' object has no len()
         <section>
           <h2>Interesting Iterator Idiosyncrasies</h2>
           <aside class="notes" data-markdown>
-            - So iterators are lazy iterables, that only know how to give you their next item
-            - And their also iterables, which means you can loop over them
-            - The fact that iterators are lazy iterables can lead to some interesting consequences
-            - In fact, whenever you see strange or unexpected behavior while working with iterables, you can probably trace that behavior back to the way the iterator protocol works
+            - So iterators are basically lazy iterables, which only know how to give you their next item
+            - The fact that iterators are lazy can lead to some interesting consequences
+            - In fact, all of those strange behaviors we saw at the beginning of this talk can be traced back to the way the iterator protocol works
+            - Let's jump back to those odd examples and see if we can understand what is going on in each
           </aside>
         </section>
 
