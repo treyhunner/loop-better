@@ -71,58 +71,6 @@
           </aside>
         </section>
 
-        <section>
-          <h2>Assumptions</h2>
-          <ul>
-            <li>You know how to use <code>for</code> loops in Python</li>
-            <li>You're not already familiar with iterators and the iterator protocol</li>
-          </ul>
-          <aside class="notes" data-markdown>
-            - During this talk, I'm assuming you know how `for` loops work in Python
-            - I'm also assuming you're **not** already familiar with the iterator protocol in Python
-            - By the end of this talk I hope that you'll understand the basics of the iterator protocol and you'll have a greater appreciation for how iteration works in Python
-          </aside>
-        </section>
-
-        <section>
-          <h2>Definitions</h2>
-          <ul>
-            <li><strong>iterable</strong>: anything you can loop over</li>
-            <li><strong>sequence</strong>: ordered iterable, indexable (starting at 0)</li>
-            <li><strong>iterator</strong>: magical objects that make looping possible</li>
-            <li><strong>__dunder__</strong>: method used for operator overloading</li>
-          </ul>
-          <aside class="notes" data-markdown>
-            - I will be using some terminology that you may not already be familiar with
-            - An **iterable** is anything you can iterate over.  So anything you can loop over with a `for` loop is an iterable.
-            - Lists are iterables, dictionaries are iterables, sets are iterables, strings are iterables... lots of things in Python are iterables
-            - If you can loop over it with a `for` loop, it's an iterable
-            - **Sequences** are a special type of iterable that can be indexed from `0` until one less than its length
-            - Lists, tuples, and strings are all sequences
-            - Iterators are a little trickier to explain
-            - Essentially, **iterators** are the things that *make iterables work*
-            - If looping is about to happen, an iterator has to get involved
-            - I'll also use the term "dunder" which stands for "double underscore".  Dunder methods are essentially used for operator overloading.
-          </aside>
-        </section>
-
-        <section>
-          <h2>Our Goals</h2>
-          <ul>
-            <li>Loop over an iterable without using a <code>for</code> loop</li>
-            <li>Discuss <code>iterators</code> and why they matter</li>
-            <li>Discover the <strong>the iterator protocol</strong>: the secret to troubleshooting odd iteration issues in Python</li>
-          </ul>
-          <aside class="notes" data-markdown>
-            - TODO update goals to include looking at looping problems and making our own iterables
-            - We're going start by attempting something weird...
-            - We're going to try to create a `for` loop without actually writing a `for` loop
-            - Lists, dictionaries, Django querysets, files, and anything else you can loop over all rely on: the iterator protocol
-            - The iterator protocol is the secret to all looping in Python
-            - Our goal is to understand it so that we can more easily troubleshoot weird looping issues as they arise
-          </aside>
-        </section>
-
       </section>
 
       <!-- 3 minutes -->
@@ -158,26 +106,6 @@
             - We could also pass it to `sum` to add up all the squared numbers **(click)**
             - Except that doesn't work... we got `0`
             - You cannot loop over generators twice.  We're going to learn why that is.
-          </aside>
-        </section>
-
-        <section>
-          <h2>Looping Twice</h2>
-          <pre class="python"><code data-trim data-noescape>
->>> names = ['Kayla', 'Daniel', 'Charlotte', 'Benjamin']
->>> indexed_names = enumerate(names)
->>> <span class="fragment">enumerate
-&lt;enumerate object at 0x7efefc06d9d8>
->>> <span class="fragment">list(indexed_names)
-[(0, 'Kayla'), (1, 'Daniel'), (2, 'Charlotte'), (3, 'Benjamin')]
->>> <span class="fragment">list(indexed_names)
-[]</span>
-          </code></pre>
-          <aside class="notes" data-markdown>
-            - This is also a problem with `enumerate` objects **(click)**
-            - If we loop over an `enumerate` object, we'll get tuples of indexes and items
-            - If we loop over the same `enumerate` object again, we get nothing at all
-            - Again, we're going to learn what's going on here
           </aside>
         </section>
 
@@ -1120,63 +1048,41 @@ def square_all(numbers):
       <section>
 
         <section>
-          <h2>Interesting Iterator Idiosyncrasies</h2>
+          <h2>Looping Problems</h2>
+          <h4 class="fragment">Revisited</h4>
           <aside class="notes" data-markdown>
-            - So iterators are basically lazy iterables, which only know how to give you their next item
-            - The fact that iterators are lazy can lead to some interesting consequences
-            - In fact, all of those strange behaviors we saw at the beginning of this talk can be traced back to the way the iterator protocol works
-            - Let's jump back to those odd examples and see if we can understand what is going on in each
+            - At this point we're ready to jump back **(click)** to those odd examples we saw earlier and try to figure out what was going on
           </aside>
         </section>
 
         <section>
-          <h2>Exhausted</h2>
+          <h3 class="fragment" data-fragment-index=3>Exhausted</h3>
+          <h2 class="fragment strike" data-fragment-index=3>Looping Twice</h2>
           <pre class="python"><code data-trim data-noescape>
 >>> numbers = [1, 2, 3, 5, 7]
 >>> squares = (n**2 for n in numbers)
->>> <span class="fragment">tuple(squares)
+>>> <span class="fragment" data-fragment-index=1>tuple(squares)
 (1, 2, 3, 5, 7)
->>> </span><span class="fragment">sum(squares)
+>>> </span><span class="fragment" data-fragment-index=2>sum(squares)
 0
->>> </span><span class="fragment">tuple(squares)
+>>> </span><span class="fragment" data-fragment-index=4>tuple(squares)
 ()</span>
           </code></pre>
           <aside class="notes" data-markdown>
             - Here we have a generator object, `squares`
             - If we pass this generator to the `tuple` constructor, we'll get a tuple of its items back **(click)**
             - If we then try to compute the `sum` of the numbers in this generator, we'll get `0` **(click)**
-            - This generator is now empty: we've exhausted it
+            - This generator is now empty: we've exhausted it **(click)**
             - If we try to make a tuple out of it again, we'll get an empty tuple **(click)**
             - Generators are iterators
+            - Remember that iterators are like Hello Kitty PEZ dispensers that cannot be reloaded
             - And iterators are single-use iterables
           </aside>
         </section>
 
         <section>
-          <h2>Partially-Consumed</h2>
-          <pre class="python"><code data-trim data-noescape>
->>> numbers = [1, 2, 3, 5, 7]
->>> squares = (n**2 for n in numbers)
->>> <span class="fragment">next(e)
-1
->>> </span><span class="fragment">next(e)
-2
->>> </span><span class="fragment">list(e)
-[3, 5, 7]</span>
-          </code></pre>
-          <aside class="notes" data-markdown>
-            - We can call next on an iterator to manually loop over it **(click)**
-            - If we call next on an iterator a couple times... **(click)**
-            - And then make a list out of it... **(click)**
-            - We'll only get the items after those first two
-            - Because we've partially-consumed this iterator
-            - Iterators are like one-directional tally counters without a reset button
-          </aside>
-        </section>
-
-        <section>
           <h3 class="fragment" data-fragment-index=5>Partially-Consumed</h3>
-          <h2 class="fragment strike" data-fragment-index=5>Containment</h2>
+          <h2 class="fragment strike" data-fragment-index=5>Containment Checking</h2>
           <pre class="python"><code data-trim data-noescape>
 >>> numbers = [1, 2, 3, 5, 7]
 >>> squares = (n**2 for n in numbers)
@@ -1195,79 +1101,9 @@ True
             - If we ask the same question again, we'll get `False` **(click)**
             - When whether `9` is in this generator, Python has to loop over this generator to find `9` **(click)**
             - If we keep looping over it at this point, we'll only get the last two numbers because we've already consumed the numbers before this point **(click)**
-            - Asking whether something is *contained* in an iterator will partially consume it **(click)**
+            - Asking whether something is *contained* in an iterator will partially consume the iterator **(click)**
+            - Remember that iterators are like one-directional tally-counters without a reset button
             - There is no way to know whether something is in an iterator without starting to loop over it
-          </aside>
-        </section>
-
-        <section>
-          <h2>Multiple iterators</h2>
-          <pre class="python"><code data-trim data-noescape>
->>> numbers = [1, 2, 3, 5, 7]
->>> i1 = iter(numbers)
->>> i2 = iter(numbers)
->>> <span class="fragment">next(i1)
-1
->>> </span><span class="fragment">next(i1)
-2
->>> </span><span class="fragment">next(i2)
-1
->>> </span><span class="fragment">next(i1)
-3</span>
-          </code></pre>
-          <aside class="notes" data-markdown>
-            - If we get multiple iterators from a list, we can loop over them independently **(click)**
-            - **(click)** As we loop over one **(click)**
-            - The other one will maintain its place **(click)**
-            - These iterators are independent of each other **(click)**
-          </aside>
-        </section>
-
-        <section>
-          <h2>Multiple iterators</h2>
-          <pre class="python"><code data-trim data-noescape>
->>> numbers = [1, 2, 3, 5, 7]
->>> squares = (n**2 for n in numbers)
->>> i1 = iter(squares)
->>> i2 = iter(squares)
->>> <span class="fragment">next(i1)
-1
->>> </span><span class="fragment">next(i1)
-4
->>> </span><span class="fragment">next(i2)
-9
->>> </span><span class="fragment">squares is i1 is i2
-True</span>
-          </code></pre>
-          <aside class="notes" data-markdown>
-            - If we ask a generator for multiple iterators, it will give us itself back twice
-            - As we loop over the first iterator, we're actually looping over the generator **(click)**
-            - So the second iterator variable, which is also the generator, will move along with it **(click)**
-            - Because all three of these variables point to the same object **(click)**
-          </aside>
-        </section>
-
-        <section>
-          <h2>Partially-Consumed</h2>
-          <pre class="python"><code data-trim data-noescape>
->>> from itertools import takewhile
->>> def less_than_ten(n): return n &lt; 10
->>> numbers = [1, 2, 3, 5, 7]
->>> squares = (n**2 for n in numbers)
->>> <span class="fragment">x = takewhile(less_than_ten, squares)
->>> </span><span class="fragment">next(squares)
-1
->>> </span><span class="fragment">list(x)
-[4, 9]
->>> </span><span class="fragment">list(squares)
-[49]</span>
-          </code></pre>
-          <aside class="notes" data-markdown>
-            - **(click)** Here we're using the `itertools.takewhile` function to get an iterator which will give us all numbers in our `squares` generator which are less than 10 
-            - If we start to loop over `squares` generator... **(click)**
-            - And then loop over our `takewhile` iterator (**(click)**), it will have *skipped* our first square because we partially-consumed our `squares` generator
-            - If we loop over the rest of our squares generator (**(click)**) we'll see that 25 seems to have been skipped
-            - The `takewhile` iterator had to take a look at the number `25` to see that `9` was the last consecutive number that was less than `10`
           </aside>
         </section>
 
