@@ -212,38 +212,6 @@ False</span>
         </section>
 
         <section>
-          <h2>Python while loop</h2>
-          <p>
-          <pre class="python"><code data-trim>
-numbers = [1, 2, 3, 5, 7]
-i = 0
-while i < len(numbers):
-    print(numbers[i])
-    i += 1
-          </code></pre>
-          <pre class="fragment"><code data-trim>
-1
-2
-3
-5
-7
-          </code></pre>
-          </p>
-          <aside class="notes" data-markdown>
-            - This is a `while` loop
-            - We set `i` to `0` and then we start looping
-            - This `while` loop keeps on executing the same code over and over as long as the condition (`i &lt; len(numbers)`) is true **(click)**
-            - So each number in this list (from index 0 to index 4) gets printed out
-            - So `while` loops loop until a given condition
-            - Notice that we're:
-              - initializing a counter
-              - checking a condition
-              - and incrementing and that counter *as we loop*
-            - This is a very common way to loop...
-          </aside>
-        </section>
-
-        <section>
           <h2>C-style for loop</h2>
           <p>
           <pre class="javascript"><code data-trim>
@@ -261,11 +229,11 @@ for (let i = 0; i < numbers.length; i += 1) {
           </code></pre>
           </p>
           <aside class="notes" data-markdown>
-            - So many programming languages have `for` loops
             - This is a traditional C-style `for` loop written in JavaScript
             - We start with `i` set to `0`, we check whether `i` is less than the length of the array, we loop, and we increment `i` by 1 each time we loop
             - Once the condition is no longer true, we'll stop looping **(click)**
-            - *(pause)* Python **does not** have a `for` loop... at least not the traditional *C-style* `for` loop
+            - This `for` loop prints out each item in an array
+            - *(pause)* Python **does not** have `for` loops... at least not the traditional *C-style* `for` loop we see here
             - What we *do* have is a for-*in* loop
           </aside>
         </section>
