@@ -205,9 +205,9 @@ False</span>
       <section>
 
         <section>
-          <h2>Review: Loops</h2>
+          <h2>Review Time</h2>
           <aside class="notes" data-markdown>
-            - Let's review the different types of loops that exist in Python and how our looping constructs compare to other programming languages
+            - Before we dive in, let's review for loops, iterables, and sequences to make sure we're all on the same page
           </aside>
         </section>
 
@@ -266,20 +266,8 @@ for n in numbers:
           </aside>
         </section>
 
-      </section>
-
-      <!-- 1 minutes -->
-      <section>
-
         <section>
-          <h2>Review: Iterables</h2>
-          <aside class="notes" data-markdown>
-            - Before we dive much deeper, let's do a quick review of iterables
-          </aside>
-        </section>
-
-        <section>
-          <h2>Iterables</h2>
+          <h2>Iterables are iter-able</h2>
           <p>
           <pre class="python"><code data-trim>
 for item in some_iterable:
@@ -287,7 +275,6 @@ for item in some_iterable:
           </code></pre>
           </p>
           <aside class="notes" data-markdown>
-            - An iterable is anything you can iterate over
             - *If* you can loop over something with a `for` loop *it is* an iterable
             - And... if something *is* an iterable, you can loop over it with a `for` loop
             - Iterables can be looped over and anything that can be looped is an iterable
@@ -310,7 +297,7 @@ for item in some_iterable:
           </code></pre>
           </p>
           <aside class="notes" data-markdown>
-            - Sequences are a very common type of itrable
+            - Sequences are a very common type of iterable
             - **(click)** Lists are sequences, **(click)** tuples are sequences, **(click)** strings are sequences
             - **(click)** Sequences are iterables which can be indexed starting from ``0`` and ending at one less than the length of the sequence **(click)**
             - **(click)** Lists, tuples, strings and *all other* sequences can be indexed this way
@@ -336,7 +323,7 @@ for item in some_iterable:
             - **(click)** Files are iterables
             - **(click)** And generators are iterables
             - **(click)** There are even infinitely long iterables, like `count` objects from the `itertools` module
-            - *None* of these of these iterables are sequences
+            - *None* of these iterables are sequences
           </aside>
         </section>
 
@@ -1425,7 +1412,7 @@ def math_range(sequence):
             - When working with iterables, try to assume you're working with iterators... because you very well might be
             - Iterable cannot necessarily be indexed: sequences are iterables but iterables may not be sequences
             - When someone says "iterable" they mean "something we can iterate over" and that's all
-            - Try not to assume your itebles have more than features than iteration
+            - Try not to assume your iterables have more than features than iteration
           </aside>
         </section>
 
