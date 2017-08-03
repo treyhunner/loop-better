@@ -302,7 +302,7 @@ for item in some_iterable:
       <section>
 
         <section>
-          <h2>How Do For Loops Work?</h2>
+          <h2>How do for loops work?</h2>
           <aside class="notes" data-markdown>
             - Let's talk about how <code>for</code> loops work in Python
             - Specifically let's talk about how we could loop over an iterable *without* using a `for` loop
@@ -366,7 +366,7 @@ TypeError: 'set' object does not support indexing
       <section>
 
         <section>
-          <h2>Iterators Power For Loops</h2>
+          <h2>Iterators power for loops</h2>
           <aside class="notes" data-markdown>
             - Iterators are the secret to looping in Python
             - Every iterable in Python can give you an iterator and you can *use* that iterator to loop over your iterable
@@ -909,7 +909,8 @@ oranges
             <li>Iterators are the least featureful form of iterables</li>
             <li>Default to assuming your iterables are iterators</li>
             <li>Don't say "iterable" when you mean "sequence"</li>
-            <li>Embrace the iterator protocol</li>
+            <li>When you need a new lazy iterable, make a generator</li>
+            <li>Every form of iteration relies on the iterator protocol</li>
           </ul>
           <aside class="notes" data-markdown>
             - Iterators are the most rudimentary form of iterables
@@ -925,13 +926,20 @@ oranges
       </section>
 
         <section style="text-align: left;" data-background="#663399" data-background-transition="slide" data-transition="slide">
-          <h1>Final</h1>
+          <h3>Things to Google</h3>
+          <ul>
+            <li><a href="https://www.youtube.com/watch?v=EnSu9hHGq5o">Loop like a native</a></li>
+            <li><a href="http://treyhunner.com/2016/12/python-iterator-protocol-how-for-loops-work/">The iterator protocol</a></li>
+            <li><a href="http://treyhunner.com/2016/04/how-to-loop-with-indexes-in-python/">Looping with indexes in Python</a></li>
+            <li><a href="https://encrypted.google.com/search?hl=en&q=How%20generators%20work%20in%20Python">How generators work in Python</a></li>
+          </ul>
+
           <p>
           <small><a href="http://treyhunner.com">Trey Hunner</a> / <a href="https://twitter.com/treyhunner">@treyhunner</a></small>
           </p>
           <p>
           <small>
-            Technical trainer
+            Python &amp; Django Team Trainer
             <br>
             <a href="http://truthful.technology">http://truthful.technology</a>
           </small>
