@@ -25,7 +25,7 @@
     <div class="reveal">
       <div class="slides">
 
-      <!-- 3 minutes -->
+      <!-- 1 minute -->
       <section>
 
         <section data-background="#ffffff" data-background-transition="zoom" data-transition="zoom" data-transition-speed="fast">
@@ -65,21 +65,21 @@
             - My name is Trey.  I help Django teams on-board new teammates and turn their front-end developers into full-stack Django developers.
             - I also host a free live webcast every week on Python-related topics... Unfortunately I *do* usually hold them at 3am in Australia Eastern Standard Time
             - I'm also one of the co-organizers of my local Python meetup in San Diego
-            - And I've helped organize four Django Girls workshops in Southern California
+            - I've helped organize four Django Girls workshops in Southern California
             - And I'm also one of the 13 directors at the Python Software Foundation
-            - That's a bit about me... now let's talk about some problems
+            - That's a bit about me... now let's talk about looping
           </aside>
         </section>
 
       </section>
 
-      <!-- 3 minutes -->
+      <!-- 2 minutes -->
       <section>
 
         <section>
           <h2>Looping Problems</h2>
           <aside class="notes" data-markdown>
-            - Every good journey starts with curiosity: let's look at some confusing things to pique our curiosity and motivate us to learn
+            - Every *interesting journey* starts with a problem: let's look at some confusing things to pique our curiosity and motivate us to learn
           </aside>
         </section>
 
@@ -96,14 +96,14 @@
 0</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - `numbers` is a list
-            - `squares` is a generator that will give us the squares of each of those numbers **(click)**
+            - `numbers` here is a list
+            - `squares` is a generator
+            - this generator will give us the squares of each of those numbers **(click)**
             - Generators are lazy.  **(click)** We can't do much with `squares` except for loop over it
             - We could pass it to the tuple constructor **(click)** to make a tuple out of it **(click)**
-            - We could also pass it to `sum` **(click)** to add up all the squared numbers
-            - **(click)** Except that doesn't work... we got `0`
-            - ... even though all of these numbers are positive.
-            - We're going to learn why that is.
+            - We could also pass it to the `sum` function **(click)** to add up all the squared numbers
+            - **(click)** Except that doesn't work... we got `0`... but we expected a much bigger number
+            - We're going to learn why this happens
           </aside>
         </section>
 
@@ -121,7 +121,7 @@ False</span>
             - If we ask whether `9` is in this generator **(click)**, Python will tell us this is `True` **(click)**
             - 9 *is* in this generator
             - If we ask the *same question* again **(click)**, Python will tell us this time, that it's `False` **(click)**
-            - We're also going to talk about what's going on here
+            - We'll talk about what's going on here
           </aside>
         </section>
 
@@ -142,20 +142,21 @@ False
             - Okay that's a little odd, but let's just go with it
             - You might expect at this point that `x` and `y` at this point are tuples of key-value pairs **(click)**
             - But you'd be wrong. **(click)**
-            - `x` and `y` are not key-value pairs... they're keys. **(click)**
-            - We're also going to talk about what's going on here
+            - `x` and `y` are not tuples of key-value pairs... they're keys. **(click)**
+            - We'll explain this weird behavior also
           </aside>
         </section>
 
       </section>
 
-      <!-- 2 minutes -->
+      <!-- 4 minutes -->
       <section>
 
         <section>
           <h2>Review Time</h2>
           <aside class="notes" data-markdown>
-            - Before we dive too much deeper, let's review loops, iterables, and sequences to make sure we're all on the same page
+            - We will explain what's going on in those examples by the end of this talk
+            - But before we dive in, let's review loops, iterables, and sequences to make sure we're all on the same page
           </aside>
         </section>
 
@@ -182,7 +183,7 @@ for (let i = 0; i < numbers.length; i += 1) {
             - Once the condition is no longer true, we'll stop looping **(click)**
             - This `for` loop prints out each item in an array
             - *(pause)* Python **does not** have `for` loops... at least not the traditional *C-style* `for` loop we see here
-            - What we *do* have is a for-*in* loop
+            - What we *do* have in Python is a for-*in* loop
           </aside>
         </section>
 
@@ -205,12 +206,13 @@ for n in numbers:
           </p>
           <aside class="notes" data-markdown>
             - Our *for-in* loop is the same as what *many* programming languages call a **foreach loop**
-            - We tend to call our **for-in** loops just **for loops** though because they're the closest thing that *we have* to a traditional `for` loop
-            - So I'll be calling these for-in loops, for loops for the duration of this talk
+            - We tend to call our **for-in** loops just **for loops** though because they're the closest thing that *we have* to traditional `for` loops
+            - So I'll be calling these for-in loops `for` loops during this talk *(pause)*
             - In this `for` we're looping over each item in our list and printing those items out **(click)**
-            - Python `for` loops don't have any index variables here, index lookups, or index incrementing
-            - Python `for` loops do *all the work* of looping over our `numbers` list for us
-            - So Python doesn't have traditional C-style `for` loops, but we do have our own `for` loop that works a bit differently
+            - Python `for` loops don't have any index variables, index lookups, or index incrementing
+            - Python's `for` loops do *all the work* of looping over our `numbers` list for us
+            - So Python doesn't have traditional C-style `for` loops
+            - We do have something that we call a `for` loop but it's different
           </aside>
         </section>
 
@@ -247,7 +249,7 @@ for item in some_iterable:
           </p>
           <aside class="notes" data-markdown>
             - Sequences are a very common type of iterable
-            - **(click)** Lists are sequences, **(click)** tuples are sequences, **(click)** strings are sequences
+            - **(click)** Lists are sequences, **(click)** tuples are sequences, **(click)** and strings are sequences
             - **(click)** Sequences are iterables which can be indexed starting from ``0`` and ending at one less than the length of the sequence **(click)**
             - **(click)** Lists, tuples, strings and *all other* sequences can be indexed this way
           </aside>
@@ -289,15 +291,14 @@ for item in some_iterable:
             - So Python doesn't have traditional `for` loops
             - But we do have something that we call a `for` loop
             - Anything that can be looped over with a `for` loop is an iterable
-            - Sequences are a special type of iterable
-            - But we have more types of iterables than sequences
-            - So we're done with review...
+            - Sequences are just one type of iterable, but there are many other types of iterables
+            - So we're done with review at this point...
           </aside>
         </section>
 
       </section>
 
-      <!-- 1.5 minutes -->
+      <!-- 1 minute -->
       <section>
 
         <section>
@@ -327,7 +328,7 @@ while i < len(numbers):
           </p>
           <aside class="notes" data-markdown>
             - You might think that under the hood, Python's `for` loops use indexes to loop
-            - This would work for lists, but it won't work everything
+            - This would work for lists **(click)**, but it won't work everything
             - This way of looping *only* works for *sequences*
             - This *will not* work for all iterables
           </aside>
@@ -352,15 +353,16 @@ TypeError: 'set' object does not support indexing
             - For example this doesn't work for sets
             - If we try to manually loop a set using indexes, we'll get an error. **(click)**
             - Because **sets are not sequences**: they don't support indexing
-            - We could try converting this to a list and then loop over it with indexes, but that would be cheating
+            - At this point we could try converting this set to a list and then looping over it with indexes, but that would be cheating
             - Plus that's not going to work at all for those infinitely long iterables I mentioned earlier
-            - We *cannot* manually loop over every iterable by using indexes: it simply isn't possible sometimes
+            - We *cannot* manually loop over every iterable by using indexes: it just isn't possible sometimes
+            - So `for` loops in Python are *not* powered by indexes... they're powered by *iterators*
           </aside>
         </section>
 
       </section>
 
-      <!-- 2 minutes -->
+      <!-- 4 minutes -->
       <section>
 
         <section>
@@ -385,11 +387,11 @@ TypeError: 'set' object does not support indexing
 &lt;str_iterator object at 0x7f2b9271c860></span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - Here we have three types of iterables: a list, a tuple, and a string
+            - We have three iterables here: a list, a tuple, and a string
             - We can ask each of these for an *iterator* using Python's built-in **`iter` function** **(click)**
-            - Passing an iterable to the `iter` function will always give us back an iterator **(click)**
-            - Lists, strings, and tuples are all iterables which means they all know how to give us iterators **(click)**
-            - Every iterable will provide us with an iterator when we pass it to the built-in `iter` function
+            - Passing an iterable to the `iter` function will always give us back an iterator **(click)**, no matter what type of iterable we're working with
+            - Lists, strings, and tuples are all iterables **(click)**
+            - And every iterable will provide us with an iterator when we pass it to the built-in `iter` function
           </aside>
         </section>
 
@@ -423,10 +425,10 @@ StopIteration</span>
           <!-- TODO figure out how to give proper credit for image -->
           <!-- <footer><p><small>Tally counter image copyright Linda Spashett CC BY</small></p></footer> -->
           <aside class="notes" data-markdown>
-            - You can think of iterators as kind of like one-directional tally counters, with a broken reset button
+            - So you can think of iterators as kind of like one-directional tally counters, with a broken reset button
             - They keep track of where they are as you ask them for their next item
             - But they only go in one direction
-            - And they can't be reset
+            - And they cannot be reset
             - Iterators are one-directional tally-counts without a reset button
           </aside>
         </section>
@@ -434,10 +436,10 @@ StopIteration</span>
         <section data-background-image="hello-kitty-pez.jpg">
           <!-- TODO figure out how to give proper credit for image -->
           <aside class="notes" data-markdown>
-            - Iterators are also kind of like a Hello Kitty PEZ dispenser that cannot be reloaded
+            - Iterators are *also* kind of like a Hello Kitty PEZ dispenser that cannot be reloaded
             - When you take a PEZ out, it's gone
             - And once the dispenser is empty, it's useless
-            - Iterators are Hello Kitty PEZ dispensors that cannot be reloaded
+            - Iterators are Hello Kitty PEZ dispensers that cannot be reloaded
           </aside>
         </section>
 
@@ -453,7 +455,7 @@ def funky_for_loop(iterable, action_to_do):
           <aside class="notes" data-markdown>
             - Now that we know about iterators, let's take this `for` loop and turn it into a `while` loop
             - We know we can't use indexes to loop over iterables, but we *can* get iterators from them
-            - So our that's what our `while` loop is going to do
+            - So that's what we'll have our `while` loop do
           </aside>
         </section>
 
@@ -470,7 +472,7 @@ def funky_for_loop(iterable, action_to_do):
         <span class="fragment highlight-current-blue" data-fragment-index="5">except StopIteration:
             done_looping = True</span>
         else:
-            <span class="fragment highlight-current-blue" data-fragment-index="4">action_to_do(item)</span>
+            <span class="fragment highlight-current-blue" data-fragment-index="4">action_to_do(item)</span><span class="fragment" data-fragment-index="6"></span>
           </code></pre>
           </p>
           <aside class="notes" data-markdown>
@@ -485,7 +487,7 @@ def funky_for_loop(iterable, action_to_do):
 
         <section>
           <h2>The Iterator Protocol</h2>
-          <pre class="python"><code data-trim>
+          <pre class="python fragment"><code data-trim>
 for n in numbers:
     print(n)
           </code></pre>
@@ -500,27 +502,29 @@ print(*numbers)
 unique_numbers = set(numbers)
           </code></pre>
           <aside class="notes" data-markdown>
-            - We just wrote some code that pretty much defines the way looping works under the hood in Python
+            - The code that we just wrote pretty much defines the way looping works under the hood in Python
             - The rules we've seen about `iter` and about `next` are part of a very fancy sounding thing called **the iterator protocol**
             - This is the thing that powers all iteration in Python
-            - For loops use the iterator protocol
+            - **(click)** For loops use the iterator protocol
             - **(click)** iterable unpacking (also called multiple assignment) uses it
             - **(click)** star expressions use it
             - **(click)** many built-in functions rely on the iterator protocol
-            - The iterator protocol powers all forms of iteration in Python
+            - Anything that works with an iterable probably uses the iterator protocol in some way
+            - The iterator protocol powers *all forms* of iteration in Python
           </aside>
         </section>
 
       </section>
 
-      <!-- 2 minutes -->
+      <!-- 1 minute -->
       <section>
 
         <section>
           <h2>You've met iterators before</h2>
           <aside class="notes" data-markdown>
             - So you might be thinking that iterators seem cool, but they also just seem like an implementation detail and we might not need to care about them as users of Python
-            - So I have news for you: you have seen iterators before
+            - Because we're not Python core developers, we're just using Python... so why do we care about these?
+            - *(pause)* I have news for you: you have seen iterators before
           </aside>
         </section>
 
@@ -549,11 +553,11 @@ unique_numbers = set(numbers)
             - Which means that we can pass it to the `next` function **(click)** to get its next item **(click)**
             - *(pause)* If you've used a generator before, you know that there is something else that we can do with them **(click)**
             - You can loop over generators **(click)**
-            - If we can loop over something what is it? *(pause)*... it's an iterable
+            - If we can loop over something what type of thing is it? *(pause)*... it's an iterable
             - An iterable is anything that can be looped over
             - So I just showed you that you can use the `next` function with generators... which means generators are **iterators**
             - But we can also loop over generators... which means generators are **iterables**
-            - So what's going on here?
+            - So what's going on here?  Are they iterators our are they iterables?
           </aside>
         </section>
 
@@ -566,7 +570,7 @@ unique_numbers = set(numbers)
           <h2>I lied</h2>
           <aside class="notes" data-markdown>
             - So I haven't quite been telling you the truth... at least not the whole truth
-            - There's something *important* that I've neglected to mention so far...
+            - There's something pretty *important* that I've neglected to mention so far...
           </aside>
         </section>
 
@@ -583,10 +587,10 @@ True</span>
           </code></pre>
           <aside class="notes" data-markdown>
             - **Iterators** are also **iterables**
-            - Which means that we can an iterator *for* an iterator using the built-in `iter` function **(click)**
+            - Which means that we can get an iterator from an *iterator* using the built-in `iter` function **(click)**
             - Just like we can with any other iterable **(click)**
             - So we can also call `iter` on an *iterator* to ask **it** for an iterator
-            - When we do that **(click)** , it will give us **itself** back **(click)**
+            - When we *do that **(click)** , it will give us **itself** back **(click)***
             - Iterators are iterables and their iterator is themselves
             - Iterators are their own iterators
           </aside>
@@ -599,7 +603,7 @@ def is_iterator(iterable):
     return iter(iterable) is iterable
           </code></pre>
           <aside class="notes" data-markdown>
-            - This fact that I've neglected to mention so far, is the last part of the iterator protocol
+            - This fact that I've neglected to mention so far, that iterators are also iterables... this is the last part of the iterator protocol
             - If you ask an iterable for an iterator and it gives you *itself* back, that iterable **must** be also an iterator
             - All iterators are iterables
             - And all iterators are their own iterators
@@ -650,7 +654,6 @@ TypeError: 'list_iterator' object is not subscriptable</span>
               <tr class="fragment"><td>Iterable</td><td>&#x2714;&#xfe0f;</td><td>&#x2753;</td></tr>
               <tr class="fragment"><td>Iterator</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
               <tr class="fragment"><td>Generator</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
-              <tr class="fragment"><td>Files</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
               <tr class="fragment"><td>List</td><td>&#x2714;&#xfe0f;</td><td>&#x274c;</td></tr>
             </tbody>
           </table>
@@ -658,21 +661,20 @@ TypeError: 'list_iterator' object is not subscriptable</span>
             - **(click)** So iterables are not necessarily iterators
             - **(click)** But iterators are always iterables
             - **(click)** For example generators are iterators
-            - **(click)** And files are iterators
-            - **(click)** But lists are not
+            - **(click)** But lists are not iterators
             - Iterables are not *always* iterators, but iterators *are* always iterables
           </aside>
         </section>
 
       </section>
 
-      <!-- 2 minutes -->
+      <!-- 5 minutes -->
       <section>
 
         <section>
           <h2>Why do iterators matter?</h2>
           <aside class="notes" data-markdown>
-            - Let's talk about why we should care about iterators
+            - Alright... let's talk about why we should care about iterators
           </aside>
         </section>
 
@@ -687,7 +689,8 @@ TypeError: 'list_iterator' object is not subscriptable</span>
             - Here are a few reasons you should care about iterators
             - iterators allow us to both work with and create lazy iterables that don't do any work until we ask them for their next item
             - iterators also allow us to make infinitely long iterables
-            - And in general, the *simplicity* of the iterator protocol is the reason we have so many different types of iterables in Python
+            - And in general, the *simplicity* of the iterator protocol is the reason that we have so many different types of iterables in Python
+            - Iterators are foundational to looping in Python
           </aside>
         </section>
 
@@ -706,10 +709,13 @@ TypeError: 'list_iterator' object is not subscriptable</span>
           </code></pre>
 
           <aside class="notes" data-markdown>
-            - Here are a few reasons you should care about iterators
-            - iterators allow us to both work with and create lazy iterables that don't do any work until we ask them for their next item
-            - iterators also allow us to make infinitely long iterables
-            - And in general, the *simplicity* of the iterator protocol is the reason we have so many different types of iterables in Python
+            - You've already seen lots of iterators in Python
+            - I've already mentioned that generators are iterators
+            - `enumerate` objects are also iterators
+            - and so are `zip` objects
+            - and `range` objects
+            - and files are even iterators
+            - There are lots of iterators built-in to Python, in the standard library, and in third-party libraries that you use all the time
           </aside>
         </section>
 
@@ -731,7 +737,7 @@ TypeError: 'QuerySet' object is not an iterator
 False</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - Django querysets are also not iterators **(click)**
+            - Django querysets are *(pause)* not iterators **(click)**
             - They are sort of lazy though **(click)**
             - Django QuerySets will not query your database until ask them for an iterator **(click)**
             - As soon as you ask them for an iterator, a database query will be executed **(click)**
@@ -739,6 +745,7 @@ False</span>
             - And they cache their results so they don't need to do the same query more than once
             - **(click)** But they are *not* iterators
             - So querysets are lazy but they're not iterators
+            - The fact that Django's querysets cache their results is useful, but it can be problematic if you're trying to loop over millions of records that you don't really want to be stored in memory all at once
           </aside>
         </section>
 
@@ -757,20 +764,18 @@ False</span>
 []</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - Django's querysets cache their results so they don't have to perform the same query twice
-            - That caching can be useful but it could be a problem if you're trying to loop over millions of records that you really don't want to be stored in memory all at once
             - For that use case, Django's querysets provide a method called `iterator` **(click)**, which gives us an iterator instead of a queryset object **(click)**
             - Just like every other iterator, we can call `next` on it **(click)** or loop over it, **(click)** but those are the only things that we can do with it
             - And once we've looped over a queryset iterator **(click)**, it's consumed
-            - So Django querysets are *not* iterators, but you can get a lazy iterator from them for memory-efficiency
+            - So Django querysets are *not* iterators, but you can get a lazy iterator from them for which is more memory-efficiency because it doesn't cache anything and it doesn't store any extra records in memory
           </aside>
         </section>
 
         <section>
           <h2>You can make lazy iterables</h2>
           <aside class="notes" data-markdown>
-            - So it's useful to know about iterators because you actually probably use them quite a bit already
-            - But you can also use iterators to create your own lazy iterables
+            - So it's useful to know about iterators because you actually probably use them quite a bit already and you may not have even known it
+            - But you can also use iterators to create *your own* lazy iterables
           </aside>
         </section>
 
@@ -795,20 +800,20 @@ def square_all(numbers):
     return (n**2 for n in numbers)
           </code></pre>
           <aside class="notes" data-markdown>
-            - This class makes an iterator that accepts an iterable of numbers and squares each of the numbers given to it
-            - If this iterator was passed an infinite iterable, it would lazily square each item in it, as we looped
-            - We *do not* normally make iterators this way
+            - This class makes an iterator that accepts an *iterable of numbers* and squares each of those numbers
+            - If this iterator was passed an infinite iterable, it would lazily square each item in it, as we looped over the iterator... but it won't do any work until we start looping
+            - This works, but we *don't* usually make iterators this way
             - Usually when we want to make a custom iterator, we make a generator function **(click)**
-            - This is a generator function is equivalent to that class
-            - That `yield` statement might seem magical, but it's very powerful: that's the thing that allows lazy evaluation to happen in between `next` calls
-            - Another way we could implement this same iterator is with a generator expression **(click)**
+            - This generator function is equivalent to that class
+            - *(pause)* That `yield` statement probably seem magical, but it is *very* powerful: that `yield` allows us to put our generator on pause between `next` calls
+            - *(pause)* Another way we could implement this same iterator is with a generator expression **(click)**
             - This does the same thing as that generator function but it uses a syntax that looks like a list comprehension
             - If you need to make a lazy iterable, think of iterators... and consider making a generator function or a generator expression
         </section>
 
       </section>
 
-      <!-- 2 minutes -->
+      <!-- 3 minutes -->
       <section>
 
         <section>
@@ -820,53 +825,53 @@ def square_all(numbers):
         </section>
 
         <section>
-          <h3 class="fragment" data-fragment-index=3>Exhausted</h3>
-          <h2 class="fragment strike" data-fragment-index=3>Looping Twice</h2>
+          <h3 class="fragment" data-fragment-index=4>Exhausted</h3>
+          <h2 class="fragment strike" data-fragment-index=4>Looping Twice</h2>
           <pre class="python"><code data-trim data-noescape>
 >>> numbers = [1, 2, 3, 5, 7]
 >>> squares = (n**2 for n in numbers)
->>> <span class="fragment" data-fragment-index=1>tuple(squares)
+>>> <span class="fragment" data-fragment-index=1>tuple(squares)</span><span class="fragment" data-fragment-index=2>
 (1, 2, 3, 5, 7)
->>> </span><span class="fragment" data-fragment-index=2>sum(squares)
+>>> </span><span class="fragment" data-fragment-index=3>sum(squares)</span><span class="fragment" data-fragment-index=5>
 0
->>> </span><span class="fragment" data-fragment-index=4>tuple(squares)
+>>> </span><span class="fragment" data-fragment-index=6>tuple(squares)</span><span class="fragment" data-fragment-index=7>
 ()</span>
           </code></pre>
           <aside class="notes" data-markdown>
             - Here we have a generator object, `squares`
-            - If we pass this generator to the `tuple` constructor, we'll get a tuple of its items back **(click)**
-            - If we then try to compute the `sum` of the numbers in this generator, we'll get `0` **(click)**
+            - If we pass this generator to the `tuple` constructor **(click)**, we'll get a tuple of its items back **(click)**
+            - If we then try to compute the `sum` of the numbers in this generator **(click)**, we'll get `0` **(click)**
             - This generator is now empty: we've exhausted it **(click)**
-            - If we try to make a tuple out of it again, we'll get an empty tuple **(click)**
+            - If we try to make a tuple out of it again **(click)**, we'll get an empty tuple **(click)**
             - Generators are iterators
-            - Remember that iterators are like Hello Kitty PEZ dispensers that cannot be reloaded
-            - And iterators are single-use iterables
+            - And iterators are like Hello Kitty PEZ dispensers that cannot be reloaded
+            - Once we run out of PEZ, the dispenser is forever empty
           </aside>
         </section>
 
         <section>
-          <h3 class="fragment" data-fragment-index=5>Partially-Consumed</h3>
-          <h2 class="fragment strike" data-fragment-index=5>Containment Checking</h2>
+          <h3 class="fragment" data-fragment-index=7>Partially-Consumed</h3>
+          <h2 class="fragment strike" data-fragment-index=7>Containment Checking</h2>
           <pre class="python"><code data-trim data-noescape>
 >>> numbers = [1, 2, 3, 5, 7]
 >>> squares = (n**2 for n in numbers)
->>> <span class="fragment" data-fragment-index=1>9 in squares
+>>> <span class="fragment" data-fragment-index=1>9 in squares</span><span class="fragment" data-fragment-index=2>
 True
->>> </span><span class="fragment" data-fragment-index=2>9 in squares
-False</span><span class="fragment" data-fragment-index=3>
+>>> </span><span class="fragment" data-fragment-index=3>9 in squares</span><span class="fragment" data-fragment-index=4>
+False</span><span class="fragment" data-fragment-index=5>
 >>> squares = (n**2 for n in numbers)
 >>> 9 in squares
 True
->>> </span><span class="fragment" data-fragment-index=4>list(squares)
+>>> </span><span class="fragment" data-fragment-index=6>list(squares)
 [25, 49]</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - If we ask whether `9` is in this `squares` generator, we'll get `True` **(click)**
-            - If we ask the same question again, we'll get `False` **(click)**
-            - When whether `9` is in this generator, Python has to loop over this generator to find `9` **(click)**
-            - If we keep looping over it at this point, we'll only get the last two numbers because we've already consumed the numbers before this point **(click)**
+            - If we ask whether `9` is in this `squares` generator **(click)**, we'll get `True` **(click)**
+            - If we ask the same question again **(click)**, we'll get `False` **(click)**
+            - When we ask whether `9` is in this generator, Python has to loop over this generator to find `9` **(click)**
+            - If we kept looping over it after checking for `9`, we'll only get the last two numbers because we've already consumed the numbers before this point **(click)**
             - Asking whether something is *contained* in an iterator will partially consume the iterator **(click)**
-            - Remember that iterators are like one-directional tally-counters without a reset button
+            - *Remember* that iterators are like one-directional tally-counters without a reset button
             - There is no way to know whether something is in an iterator without starting to loop over it
           </aside>
         </section>
@@ -880,12 +885,12 @@ True
 ...</span><span class="fragment">
 apples
 oranges
->>> </span><span class="fragment">x, y = counts</span><span class="fragment">
+>>> </span><span class="fragment">x, y = counts
 >>> </span><span class="fragment">x, y
 ('apples', 'oranges')</span>
           </code></pre>
           <aside class="notes" data-markdown>
-            - When you loop over dictionaries **(click)** you get keys **(click)**
+            - When you *loop* over dictionaries **(click)** you get keys **(click)**
             - Looping relies on the iterator protocol
             - Iterable unpacking also relies on the iterator protocol **(click)**
             - Unpacking a dictionary is really the same as looping over the dictionary **(click)**
@@ -909,9 +914,11 @@ oranges
           <aside class="notes" data-markdown>
             - Iterators are the most rudimentary form of iterables
             - When working with iterables, try to assume you're working with iterators... because you very well might be
-            - Iterable cannot necessarily be indexed: sequences are iterables but iterables may not be sequences
-            - When someone says "iterable" they mean "something we can iterate over" and that's all
+            - Iterables cannot necessarily be indexed: sequences are iterables but iterables may not be sequences
+            - When someone says the word "iterable" they mean "something that we can iterate over" and that's all
             - Try not to assume your iterables have more than features than iteration
+            - And if you need to make your own lazy iterable, think of iterators, and consider making your own generator function or generator expression
+            - Also remember that if the operation you're doing may be looping under the hood, you need to understand the iterator protocol to understand what that really means
           </aside>
         </section>
 
