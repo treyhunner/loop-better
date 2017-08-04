@@ -811,6 +811,98 @@ def square_all(numbers):
             - If you need to make a lazy iterable, think of iterators... and consider making a generator function or a generator expression
         </section>
 
+        <section>
+          <h2>think lazy</h2>
+          <pre class="python fragment"><code data-trim data-noescape>
+hours_worked = 0
+for event in events:
+    if event.is_billable():
+        hours_worked += event.duration
+          </code></pre>
+          <pre class="python fragment"><code data-trim data-noescape>
+billable_times = (
+    event.duration
+    for event in events
+    if event.is_billable()
+)
+
+hours_worked = sum(billable_times)
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - once you've embraced the idea of lazy iterables, you'll find that there are lots of possibilities for discovering or creating helper functions that assist you in looping over iterables and processing data
+            - **(click)** This is a for loop that sums up all billable hours in a Django queryset
+            - **(click)** This is the same thing using a generator expression for lazy evaluation
+            - These two blocks of code do the same thing
+            - Notice that the structure of this cod is fundamentally different
+            - We're able to use the `sum` function in the bottom example because we have a lazy iterable to work with
+          </aside>
+        </section>
+
+        <section>
+          <h2>Think lazy</h2>
+          <pre class="python fragment"><code data-trim data-noescape>
+for i, line in enumerate(log_file):
+    if i >= 10:
+        break
+    print(line)
+          </code></pre>
+          <pre class="python fragment"><code data-trim data-noescape>
+from itertools import islice
+
+first_ten_lines = islice(log_file, 10)
+for line in first_ten_lines:
+    print(line)
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - **(click)** This code prints out the first ten lines of a log file
+            - **(click)** This is the same code written using a helper function to lazily grab only the first ten lines from our file as we loop
+            - Again this code has a very different structure: we've removed the need for a loop with an **early break** and we've given a **good name** to an object that didn't even exist before... that `first_ten_lines` iterator
+            - By the way the itertools library is in the Python standard library.  Definitely look it up if you've never explored it.  It has a bunch of great helpers in it for working with and creating lazy iterables
+          </aside>
+        </section>
+
+        <section>
+          <h2>Think Lazy</h2>
+          <pre class="python fragment"><code data-trim data-noescape>
+previous = readings[0]
+for current in readings[1:]:
+    differences.append(current - previous)
+    previous = current
+          </code></pre>
+          <pre class="python fragment"><code data-trim data-noescape>
+from my_fancy_utils_module import with_previous
+
+differences = []
+for previous, current in with_previous(readings):
+    differences.append(current - previous)
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - **(click)** This code makes a list of the differences between consecutive values in a sequence
+            - Notice that this code has an extra variable that we need to assign each time we loop
+            - **(click)** This is the same code but we're using a generator function that we made up
+            - The generator function only has 6 lines of code in it... you'll have to trust me though because it's not on this slide
+            - Notice that this code doesn't have awkward variable assignments hanging around our loop... the `with_previous` generator function handles that for us
+          </aside>
+        </section>
+
+        <section>
+          <h2>THINK LAZY</h2>
+          <pre class="python"><code data-trim data-noescape>
+def with_previous(iterable):
+    """Yield (previous, current) tuples, starting with second."""
+    iterator = iter(iterable)
+    previous = next(iterator)
+    for item in iterator:
+        yield previous, item
+        previous = item
+          </code></pre>
+          <aside class="notes" data-markdown>
+            - In case you're curious what that mysterious generator function looks like, here's a plausible version of it
+            - Notice that we're manually getting an iterator from our iterable and calling `nexxt` on it to grab the first item.
+            - This function works not just with sequences, but with any type of iterable
+          </aside>
+        </section>
+
       </section>
 
       <!-- 3 minutes -->
@@ -825,14 +917,14 @@ def square_all(numbers):
         </section>
 
         <section>
-          <h3 class="fragment" data-fragment-index=4>Exhausted</h3>
-          <h2 class="fragment strike" data-fragment-index=4>Looping Twice</h2>
+          <h3 class="fragment" data-fragment-index=5>Exhausted</h3>
+          <h2 class="fragment strike" data-fragment-index=5>Looping Twice</h2>
           <pre class="python"><code data-trim data-noescape>
 >>> numbers = [1, 2, 3, 5, 7]
 >>> squares = (n**2 for n in numbers)
 >>> <span class="fragment" data-fragment-index=1>tuple(squares)</span><span class="fragment" data-fragment-index=2>
 (1, 2, 3, 5, 7)
->>> </span><span class="fragment" data-fragment-index=3>sum(squares)</span><span class="fragment" data-fragment-index=5>
+>>> </span><span class="fragment" data-fragment-index=3>sum(squares)</span><span class="fragment" data-fragment-index=4>
 0
 >>> </span><span class="fragment" data-fragment-index=6>tuple(squares)</span><span class="fragment" data-fragment-index=7>
 ()</span>
@@ -928,10 +1020,10 @@ oranges
         <section style="text-align: left;" data-background="#663399" data-background-transition="slide" data-transition="slide">
           <h3>Things to Google</h3>
           <ul>
-            <li><a href="https://www.youtube.com/watch?v=EnSu9hHGq5o">Loop like a native</a></li>
+            <li><a href="https://encrypted.google.com/search?hl=en&q=How%20generators%20work%20in%20Python">How generators work in Python</a></li>
+            <li><a href="https://docs.python.org/3/library/itertools.html">Python itertools recipes</a></li>
             <li><a href="http://treyhunner.com/2016/12/python-iterator-protocol-how-for-loops-work/">The iterator protocol</a></li>
             <li><a href="http://treyhunner.com/2016/04/how-to-loop-with-indexes-in-python/">Looping with indexes in Python</a></li>
-            <li><a href="https://encrypted.google.com/search?hl=en&q=How%20generators%20work%20in%20Python">How generators work in Python</a></li>
           </ul>
 
           <p>
@@ -948,7 +1040,9 @@ oranges
           <img src="logo.svg" class="no-style logo">
           </p>
           <aside class="notes" data-markdown>
-            Any questions?
+            - If you write down one thing right now, write down generators
+            - If you write down two things: write down itertools
+            - That's all I've got.  Thank you!
           </aside>
         </section>
 
