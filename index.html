@@ -36,6 +36,7 @@
           </p>
           <aside class="notes" data-markdown>
             - I'd like to go on a journey with you through the land of iterables and iterators
+            - There will be *a lot* of code on my slides and I'm going to move quickly, so you might need to pay attention.  I'll tweet out a link to my slides after my talk so you can review them on your own later.
             - But first... let me introduce myself
           </aside>
         </section>
@@ -43,7 +44,7 @@
         <section>
           <div class="aboutme-card">
             <a href="http://truthful.technology"><img src="truthful-technology-logo.svg" class="no-style aboutme-logos"></a>
-            <span>On-site training for Django teams</span>
+            <span>On-site training for Python/Django</span>
           </div>
           <div class="aboutme-card">
             <a href="http://weeklypython.chat"><img src="pythonchat-logo.png" class="no-style aboutme-logos"></a>
@@ -62,8 +63,8 @@
             <span>Python Software Foundation director</span>
           </div>
           <aside class="notes" data-markdown>
-            - My name is Trey.  I help Django teams on-board new teammates and turn their front-end developers into full-stack Django developers.
-            - I also host a free live webcast every week on Python-related topics... Unfortunately I *do* usually hold them at 3am in Australia Eastern Standard Time
+            - My name is Trey.  I help Python &amp; Django teams on-board new teammates and turn their front-end developers into full-stack Django developers.
+            - I also host a free live webcast every week on Python-related topics, usually Saturdays at 12pm Eastern Time
             - I'm also one of the co-organizers of my local Python meetup in San Diego
             - I've helped organize four Django Girls workshops in Southern California
             - And I'm also one of the 13 directors at the Python Software Foundation
@@ -653,17 +654,18 @@ TypeError: 'list_iterator' object is not subscriptable</span>
               </tr>
             </thead>
             <tbody>
-              <tr class="fragment"><td>Iterable</td><td>&#x2714;&#xfe0f;</td><td>&#x2753;</td></tr>
-              <tr class="fragment"><td>Iterator</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
-              <tr class="fragment"><td>Generator</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
-              <tr class="fragment"><td>List</td><td>&#x2714;&#xfe0f;</td><td>&#x274c;</td></tr>
+              <tr><td>Iterable</td><td>&#x2714;&#xfe0f;</td><td>&#x2753;</td></tr>
+              <tr><td>Iterator</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
+              <tr><td>Generator</td><td>&#x2714;&#xfe0f;</td><td>&#x2714;&#xfe0f;</td></tr>
+              <tr><td>List</td><td>&#x2714;&#xfe0f;</td><td>&#x274c;</td></tr>
             </tbody>
           </table>
           <aside class="notes" data-markdown>
-            - **(click)** So iterables are not necessarily iterators
-            - **(click)** But iterators are always iterables
-            - **(click)** For example generators are iterators
-            - **(click)** But lists are not iterators
+            - So some quick review
+            - So iterables are not necessarily iterators
+            - But iterators are always iterables
+            - For example generators are iterators
+            - But lists are not iterators
             - Iterables are not *always* iterators, but iterators *are* always iterables
           </aside>
         </section>
@@ -674,25 +676,25 @@ TypeError: 'list_iterator' object is not subscriptable</span>
       <section>
 
         <section>
-          <h2>Why do iterators matter?</h2>
+          <h2>So... why do we care?</h2>
           <aside class="notes" data-markdown>
-            - Alright... let's talk about why we should care about iterators
+            - Okay this is all a little bit confusing
+            - Do you really need to know all of this?
           </aside>
         </section>
 
         <section>
-          <h2>Reasons to care about iterators</h2>
-          <ol>
+          <h2>Iterators enable laziness</h2>
+          <ol class="fragment">
             <li>Iterators allow for lazily evaluated iterables</li>
             <li>Iterators allow for infinitely long iterables</li>
             <li>Iterators allow us to save memory and (sometimes) time</li>
           </ol>
           <aside class="notes" data-markdown>
-            - Here are a few reasons you should care about iterators
-            - iterators allow us to both work with and create lazy iterables that don't do any work until we ask them for their next item
-            - iterators also allow us to make infinitely long iterables
-            - And in general, the *simplicity* of the iterator protocol is the reason that we have so many different types of iterables in Python
-            - Iterators are foundational to looping in Python
+            - Iterators allow *you* to be lazy and they allow *your code* to be lazy **(click)**
+            - Iterators allow us to both *work with* and *create* **lazy iterables** that don't do *any work* until we *ask them* for their **next item**
+            - Because we can create lazy iterables, we can make **infinitely long** iterables
+            - And we can create iterables that are conservative with system resources
           </aside>
         </section>
 
@@ -713,77 +715,17 @@ TypeError: 'list_iterator' object is not subscriptable</span>
           <aside class="notes" data-markdown>
             - You've already seen lots of iterators in Python
             - I've already mentioned that generators are iterators
-            - `enumerate` objects are also iterators
-            - and so are `zip` objects
-            - and `range` objects
-            - and files are even iterators
+            - **(click)** `enumerate` objects are also iterators
+            - **(click)** and so are `zip` objects
+            - **(click)** and a number of other objects including files
             - There are lots of iterators built-in to Python, in the standard library, and in third-party libraries that you use all the time
-          </aside>
-        </section>
-
-        <section>
-          <h2>Django <code>QuerySet</code></h2>
-          <pre class="python"><code data-trim data-noescape>
->>> from django.db import connection
->>> books = Book.objects.all()
->>> <span class="fragment">next(books)
-Traceback (most recent call last):
-  File "&lt;console>", line 1, in &lt;module>
-TypeError: 'QuerySet' object is not an iterator
->>> </span><span class="fragment">connection.queries
-[]
->>> </span><span class="fragment">iter(books)
->>> </span><span class="fragment">connection.queries
-[{'sql': 'SELECT "books_book"."id", "books_book"."title", "books_book"."publisher_id", "books_book"."publication_date", "books_book"."num_pages" FROM "books_book"', 'time': '0.001'}]
->>> </span><span class="fragment">iter(books) is books
-False</span>
-          </code></pre>
-          <aside class="notes" data-markdown>
-            - Django querysets are *(pause)* not iterators **(click)**
-            - They are sort of lazy though **(click)**
-            - Django QuerySets will not query your database until ask them for an iterator **(click)**
-            - As soon as you ask them for an iterator, a database query will be executed **(click)**
-            - So Django querysets won't do any work until you loop over them
-            - And they cache their results so they don't need to do the same query more than once
-            - **(click)** But they are *not* iterators
-            - So querysets are lazy but they're not iterators
-            - The fact that Django's querysets cache their results is useful, but it can be problematic if you're trying to loop over millions of records that you don't really want to be stored in memory all at once
-          </aside>
-        </section>
-
-        <section>
-          <h2><code>QuerySet.iterator()</code></h2>
-          <pre class="python"><code data-trim data-noescape>
->>> books = Book.objects.all()
->>> <span class="fragment">book_iterator = books.iterator()
->>> </span><span class="fragment">book_iterator
-&lt;generator object ModelIterable.__iter__ at 0x7f937e057678>
->>> </span><span class="fragment">next(book_iterator)
-&lt;Book: The Art of Asking>
->>> </span><span class="fragment">list(book_iterator)
-[&lt;Book: Success and Luck>, &lt;Book: Just Mercy>]
->>> </span><span class="fragment">list(book_iterator)
-[]</span>
-          </code></pre>
-          <aside class="notes" data-markdown>
-            - For that use case, Django's querysets provide a method called `iterator` **(click)**, which gives us an iterator instead of a queryset object **(click)**
-            - Just like every other iterator, we can call `next` on it **(click)** or loop over it, **(click)** but those are the only things that we can do with it
-            - And once we've looped over a queryset iterator **(click)**, it's consumed
-            - So Django querysets are *not* iterators, but you can get a lazy iterator from them for which is more memory-efficiency because it doesn't cache anything and it doesn't store any extra records in memory
-          </aside>
-        </section>
-
-        <section>
-          <h2>You can make lazy iterables</h2>
-          <aside class="notes" data-markdown>
-            - So it's useful to know about iterators because you actually probably use them quite a bit already and you may not have even known it
-            - But you can also use iterators to create *your own* lazy iterables
+            - These iterators all act like lazy iterables
           </aside>
         </section>
 
         <section>
           <h2>Creating your own iterator</h2>
-          <pre class="python"><code data-trim data-noescape>
+          <pre class="python fragment"><code data-trim data-noescape>
 class square_all:
     def __init__(self, numbers):
         self.numbers = iter(numbers)
@@ -802,6 +744,8 @@ def square_all(numbers):
     return (n**2 for n in numbers)
           </code></pre>
           <aside class="notes" data-markdown>
+            - So it's useful to know about iterators because you actually probably use them quite a bit already
+            - But you can also use iterators to create *your own* lazy iterables **(click)**
             - This class makes an iterator that accepts an *iterable of numbers* and squares each of those numbers
             - If this iterator was passed an infinite iterable, it would lazily square each item in it, as we looped over the iterator... but it won't do any work until we start looping
             - This works, but we *don't* usually make iterators this way
@@ -835,8 +779,9 @@ hours_worked = sum(billable_times)
             - **(click)** This is a for loop that sums up all billable hours in a Django queryset
             - **(click)** This is the same thing using a generator expression for lazy evaluation
             - These two blocks of code do the same thing
-            - Notice that the structure of this cod is fundamentally different
+            - Notice that the structure of this code is fundamentally different
             - We're able to use the `sum` function in the bottom example because we have a lazy iterable to work with
+            - Iterators allow you to fundamentally change the way you structure your code
           </aside>
         </section>
 
@@ -856,10 +801,12 @@ for line in first_ten_lines:
     print(line)
           </code></pre>
           <aside class="notes" data-markdown>
+            - **[20 MINUTES]**
             - **(click)** This code prints out the first ten lines of a log file
-            - **(click)** This is the same code written using a helper function to lazily grab only the first ten lines from our file as we loop
-            - Again this code has a very different structure: we've removed the need for a loop with an **early break** and we've given a **good name** to an object that didn't even exist before... that `first_ten_lines` iterator
-            - By the way the itertools library is in the Python standard library.  Definitely look it up if you've never explored it.  It has a bunch of great helpers in it for working with and creating lazy iterables
+            - **(click)** This code does the same thing
+            - That `first_ten_lines` thing is an iterator
+            - Iterators allowed us to *name* something that **didn't previously have a name**
+            - We've also gotten rid of the need for a `break` statement
           </aside>
         </section>
 
@@ -882,7 +829,6 @@ for previous, current in with_previous(readings):
             - **(click)** This code makes a list of the differences between consecutive values in a sequence
             - Notice that this code has an extra variable that we need to assign each time we loop
             - **(click)** This is the same code but we're using a generator function that we made up
-            - The generator function only has 6 lines of code in it... you'll have to trust me though because it's not on this slide
             - Notice that this code doesn't have awkward variable assignments hanging around our loop... the `with_previous` generator function handles that for us
           </aside>
         </section>
@@ -902,6 +848,7 @@ def with_previous(iterable):
             - In case you're curious what that mysterious generator function looks like, here's a plausible version of it
             - Notice that we're manually getting an iterator from our iterable and calling `nexxt` on it to grab the first item.
             - This function works not just with sequences, but with any type of iterable
+            - I'm not going to step through this.  You can take a closer look on my slides later.
           </aside>
         </section>
 
@@ -1042,8 +989,6 @@ oranges
           <img src="logo.svg" class="no-style logo">
           </p>
           <aside class="notes" data-markdown>
-            - If you write down one thing right now, write down generators
-            - If you write down two things: write down itertools
             - That's all I've got.  Thank you!
           </aside>
         </section>
