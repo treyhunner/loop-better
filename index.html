@@ -80,7 +80,9 @@
         <section>
           <h2>Looping Problems</h2>
           <aside class="notes" data-markdown>
-            - Every *interesting journey* starts with a problem: let's look at some confusing things to pique our curiosity and motivate us to learn
+            - Before we begin, I'd like to take a look at a couple head scratchers
+            - We will be revisiting these at the end of the talk, so I don't expect you to remember these
+            - I just want you to note that there are a few confusing things that we'll have resolutions for by the end of the talk
           </aside>
         </section>
 
@@ -89,9 +91,7 @@
           <pre class="python"><code data-trim data-noescape>
 >>> numbers = [1, 2, 3, 5, 7]
 >>> <span class="fragment">squares = (n**2 for n in numbers)
->>> </span><span class="fragment">squares
-&lt;generator object &lt;genexpr> at 0x7efefd57c3b8>
->>> <span class="fragment">tuple(squares)</span><span class="fragment">
+>>> </span><span class="fragment">tuple(squares)</span><span class="fragment">
 (1, 4, 9, 25, 49)
 >>> </span><span class="fragment">sum(squares)</span><span class="fragment">
 0</span>
@@ -100,11 +100,11 @@
             - `numbers` here is a list
             - `squares` is a generator
             - this generator will give us the squares of each of those numbers **(click)**
-            - Generators are lazy.  **(click)** We can't do much with `squares` except for loop over it
-            - We could pass it to the tuple constructor **(click)** to make a tuple out of it **(click)**
-            - We could also pass it to the `sum` function **(click)** to add up all the squared numbers
-            - **(click)** Except that doesn't work... we got `0`... but we expected a much bigger number
-            - We're going to learn why this happens
+            - Generators are not lists, they're lazy.
+            - If pass this generator to the tuple constructor **(click)** it will make a tuple out of it **(click)**
+            - And if we pass the generator to the `sum` function **(click)** we'll get the sum of all the squred numbers
+            - **(click)** But the sum is `0`... but we expected a much bigger number
+            - So that's one oddity
           </aside>
         </section>
 
@@ -122,7 +122,7 @@ False</span>
             - If we ask whether `9` is in this generator **(click)**, Python will tell us this is `True` **(click)**
             - 9 *is* in this generator
             - If we ask the *same question* again **(click)**, Python will tell us this time, that it's `False` **(click)**
-            - We'll talk about what's going on here
+            - That's a little weird too
           </aside>
         </section>
 
@@ -131,8 +131,6 @@ False</span>
           <pre class="python"><code data-trim data-noescape>
 >>> counts = {'apples': 2, 'oranges': 1}
 >>> <span class="fragment">x, y = counts</span><span class="fragment">
->>> </span><span class="fragment">x == ('apples', 2)</span><span class="fragment">
-False
 >>> </span><span class="fragment">x
 'apples'</span>
           </code></pre>
@@ -141,10 +139,10 @@ False
             - If we try to unpack this dictionary into two variables **(click)**, you might think we'll get an error
             - But we don't **(click)**... we can unpack dictionaries
             - Okay that's a little odd, but let's just go with it
-            - You might expect at this point that `x` and `y` at this point are tuples of key-value pairs **(click)**
-            - But you'd be wrong. **(click)**
+            - You might expect at this point that `x` and `y` at this point are tuples of key-value pairs
+            -  **(click)** But you'd be wrong.
             - `x` and `y` are not tuples of key-value pairs... they're keys. **(click)**
-            - We'll explain this weird behavior also
+            - That's a little weird also.  We'll come back to that at the end of this talk.
           </aside>
         </section>
 
@@ -183,8 +181,8 @@ for (let i = 0; i < numbers.length; i += 1) {
             - We start with `i` set to `0`, we check whether `i` is less than the length of the array, we loop, and we increment `i` by 1 each time we loop
             - Once the condition is no longer true, we'll stop looping **(click)**
             - This `for` loop prints out each item in an array
-            - *(pause)* Python **does not** have `for` loops... at least not the traditional *C-style* `for` loop we see here
-            - What we *do* have in Python is a for-*in* loop
+            - *(pause)* Python **does not** have traditional C-style `for` loops
+            - What we *do* have in Python is a for-*in* loop, which we tend to call just a `for` loop
           </aside>
         </section>
 
@@ -206,9 +204,7 @@ for n in numbers:
           </code></pre>
           </p>
           <aside class="notes" data-markdown>
-            - Our *for-in* loop is the same as what *many* programming languages call a **foreach loop**
-            - We tend to call our **for-in** loops just **for loops** though because they're the closest thing that *we have* to traditional `for` loops
-            - So I'll be calling these for-in loops `for` loops during this talk *(pause)*
+            - Python's *for* loop is the same as what *many* programming languages call a **foreach loop**
             - In this `for` we're looping over each item in our list and printing those items out **(click)**
             - Python `for` loops don't have any index variables, index lookups, or index incrementing
             - Python's `for` loops do *all the work* of looping over our `numbers` list for us
@@ -882,7 +878,7 @@ def with_previous(iterable):
             - This generator is now empty: we've exhausted it **(click)**
             - If we try to make a tuple out of it again **(click)**, we'll get an empty tuple **(click)**
             - Generators are iterators
-            - And iterators are like Hello Kitty PEZ dispensers that cannot be reloaded
+            - And recall that iterators are like Hello Kitty PEZ dispensers that cannot be reloaded
             - Once we run out of PEZ, the dispenser is forever empty
           </aside>
         </section>
@@ -944,20 +940,19 @@ oranges
         <section>
           <h2>Remember</h2>
           <ul>
-            <li>Iterators are the least featureful form of iterables</li>
-            <li>Default to assuming your iterables are iterators</li>
-            <li>Don't say "iterable" when you mean "sequence"</li>
-            <li>When you need a new lazy iterable, make a generator</li>
-            <li>Every form of iteration relies on the iterator protocol</li>
+            <li class="fragment">Iterators are the most rudemintary form of iterables</li>
+            <li class="fragment">Don't say "iterable" when you mean "sequence"</li>
+            <li class="fragment">Assume your iterable can be iterated over and that's it</li>
+            <li class="fragment">When you need a new lazy iterable, make a generator</li>
+            <li class="fragment">Every form of iteration relies on the iterator protocol</li>
           </ul>
           <aside class="notes" data-markdown>
-            - Iterators are the most rudimentary form of iterables
-            - When working with iterables, try to assume you're working with iterators... because you very well might be
-            - Iterables cannot necessarily be indexed: sequences are iterables but iterables may not be sequences
-            - When someone says the word "iterable" they mean "something that we can iterate over" and that's all
-            - Try not to assume your iterables have more than features than iteration
-            - And if you need to make your own lazy iterable, think of iterators, and consider making your own generator function or generator expression
-            - Also remember that if the operation you're doing may be looping under the hood, you need to understand the iterator protocol to understand what that really means
+            - I'd like you to remember that
+            - **(click)** Iterators are the most rudimentary form of iterables in Python
+            - **(click)** Sequences are iterables but iterables may not be sequences: if an iterable needs to be indexable, it's actually a sequence
+            - **(click)** When someone says the word "iterable" you can only assume they mean "something that we can iterate over" and that's it.  Don't assume your iterables have more than features than iteration.
+            - **(click)** Also if you need to make your own lazy iterable, think of iterators, and consider making your own generator function or generator expression
+            - **(click)** And finally remember that every single type of iteration in Python relies on the iterator protocol so understanding the iterator protocol is the key to understanding quite a bit about looping in Python
           </aside>
         </section>
 
